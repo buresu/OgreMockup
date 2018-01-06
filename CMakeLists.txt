@@ -48,3 +48,8 @@ target_link_libraries(OgreMockup ${ZLIB_LIBRARIES})
 target_link_libraries(OgreMockup ${ZZip_LIBRARIES})
 target_link_libraries(OgreMockup ${ASSIMP_LIBRARIES})
 target_link_libraries(OgreMockup ${OPENGL_LIBRARY})
+
+if(APPLE)
+find_library(COCOA_FRAMEWORK Cocoa)
+target_link_libraries(OgreMockup ${COCOA_FRAMEWORK})
+endif()

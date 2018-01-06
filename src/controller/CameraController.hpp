@@ -1,7 +1,6 @@
 #pragma once
 
 #include <OgreCamera.h>
-#include <OgreCameraMan.h>
 #include <OgreFrameListener.h>
 #include <OgreSceneManager.h>
 #include <OgreSceneNode.h>
