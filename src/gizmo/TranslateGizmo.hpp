@@ -4,14 +4,6 @@
 
 class TranslateGizmo : public AbstractGizmo {
 public:
-  enum AxisType {
-    AxisType_None,
-    AxisType_X,
-    AxisType_Y,
-    AxisType_Z,
-    AxisType_Camera
-  };
-
   enum TranslateType {
     TranslateType_None,
     TranslateType_X,
@@ -30,7 +22,6 @@ public:
 protected:
   virtual void render() override;
 
-  AxisType mCurrentAxisType = AxisType_None;
   TranslateType mCurrentTranslateType = TranslateType_None;
   Ogre::Vector3 mStartPosition = Ogre::Vector3::ZERO;
 

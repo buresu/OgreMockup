@@ -28,69 +28,119 @@ bool TranslateGizmo::mousePressed(const Ogre::Ray &ray) {
     cameraVec = camPos - objPos;
   }
 
-  // YZ Coordinate
-  auto r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
+  // Coordinate Angles
+  Ogre::Real angleX = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_X).valueDegrees() - 90);
+  Ogre::Real angleY = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Y).valueDegrees() - 90);
+  Ogre::Real angleZ = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Z).valueDegrees() - 90);
 
-  if (r.first) {
+  // X Coordinate
+  if (angleY > angleZ) {
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
 
-    if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.y > 0 &&
-        v.y < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_X;
-      mCurrentTranslateType = TranslateType_Y;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.z > 0 &&
-               v.z < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_X;
-      mCurrentTranslateType = TranslateType_Z;
-      mStartPosition = p;
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.x > 0 &&
+          v.x < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_X;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.x > 0 &&
+          v.x < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_X;
+        mStartPosition = p;
+      }
     }
   }
 
-  // XZ Coordinate
-  r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
+  // Y Coordinate
+  if (angleX > angleZ) {
 
-  if (r.first) {
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    if (r.first) {
 
-    if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.x > 0 &&
-        v.x < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Y;
-      mCurrentTranslateType = TranslateType_X;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(v.x) < size * Ogre::Real(0.1) && v.z > 0 &&
-               v.z < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Y;
-      mCurrentTranslateType = TranslateType_Z;
-      mStartPosition = p;
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.y > 0 &&
+          v.y < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_Y;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(p.x) < size * Ogre::Real(0.1) && v.y > 0 &&
+          v.y < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_Y;
+        mStartPosition = p;
+      }
     }
   }
 
-  // XY Coordinate
-  r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+  // Z Coordinate
+  if (angleX > angleY) {
 
-  if (r.first) {
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    if (r.first) {
 
-    if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.x > 0 &&
-        v.x < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Z;
-      mCurrentTranslateType = TranslateType_X;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(p.x) < size * Ogre::Real(0.1) && v.y > 0 &&
-               v.y < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Z;
-      mCurrentTranslateType = TranslateType_Y;
-      mStartPosition = p;
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.z > 0 &&
+          v.z < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_Z;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.x) < size * Ogre::Real(0.1) && v.z > 0 &&
+          v.z < size * Ogre::Real(1.2)) {
+        mCurrentTranslateType = TranslateType_Z;
+        mStartPosition = p;
+      }
     }
   }
 
@@ -122,8 +172,15 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
     cameraVec = camPos - objPos;
   }
 
-  if (mCurrentTranslateType == TranslateType_X &&
-      mCurrentAxisType == AxisType_Y) {
+  // Coordinate Angles
+  Ogre::Real angleX = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_X).valueDegrees() - 90);
+  Ogre::Real angleY = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Y).valueDegrees() - 90);
+  Ogre::Real angleZ = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Z).valueDegrees() - 90);
+
+  if (mCurrentTranslateType == TranslateType_X && angleY > angleZ) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
@@ -138,10 +195,8 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setPosition(mTargetStart);
       mTargetNode->translate(v.x, 0, 0);
     }
-  }
 
-  if (mCurrentTranslateType == TranslateType_X &&
-      mCurrentAxisType == AxisType_Z) {
+  } else if (mCurrentTranslateType == TranslateType_X && angleZ > angleY) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
@@ -156,10 +211,8 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setPosition(mTargetStart);
       mTargetNode->translate(v.x, 0, 0);
     }
-  }
 
-  if (mCurrentTranslateType == TranslateType_Y &&
-      mCurrentAxisType == AxisType_X) {
+  } else if (mCurrentTranslateType == TranslateType_Y && angleX > angleZ) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
@@ -174,10 +227,8 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setPosition(mTargetStart);
       mTargetNode->translate(0, v.y, 0);
     }
-  }
 
-  if (mCurrentTranslateType == TranslateType_Y &&
-      mCurrentAxisType == AxisType_Z) {
+  } else if (mCurrentTranslateType == TranslateType_Y && angleZ > angleX) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
@@ -192,10 +243,8 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setPosition(mTargetStart);
       mTargetNode->translate(0, v.y, 0);
     }
-  }
 
-  if (mCurrentTranslateType == TranslateType_Z &&
-      mCurrentAxisType == AxisType_X) {
+  } else if (mCurrentTranslateType == TranslateType_Z && angleX > angleY) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
@@ -210,10 +259,8 @@ bool TranslateGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setPosition(mTargetStart);
       mTargetNode->translate(0, 0, v.z);
     }
-  }
 
-  if (mCurrentTranslateType == TranslateType_Z &&
-      mCurrentAxisType == AxisType_Y) {
+  } else if (mCurrentTranslateType == TranslateType_Z && angleY > angleX) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
@@ -239,7 +286,6 @@ bool TranslateGizmo::mouseReleased(const Ogre::Ray &) {
     return false;
   }
 
-  mCurrentAxisType = AxisType_None;
   mCurrentTranslateType = TranslateType_None;
   mStartPosition = Ogre::Vector3::ZERO;
 
