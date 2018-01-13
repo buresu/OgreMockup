@@ -269,7 +269,7 @@ void OgreWindow::createScene() {
   renderMaterial->getTechnique(0)->getPass(0)->setLightingEnabled(false);
   renderMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("RttTex");
 
-  mMiniScreen->setMaterial("RttMat");
+  mMiniScreen->setMaterial(renderMaterial);
 
   //  renderTexture->addListener(this);
 }
