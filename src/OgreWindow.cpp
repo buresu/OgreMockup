@@ -102,6 +102,18 @@ void OgreWindow::initialize() {
   Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
+  Ogre::SceneNode *viewCameraSceneNode =
+      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+
+  mViewCamera = mOgreSceneManager->createCamera("ViewCamera");
+  mViewCamera->setPosition(Ogre::Vector3(0.0f, 0.0f, 3.0f));
+  mViewCamera->lookAt(Ogre::Vector3(0.0f, 0.0f, -0.0f));
+  mViewCamera->setNearClipDistance(0.1f);
+  mViewCamera->setFarClipDistance(1000.0f);
+  //  mOgreCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+
+  viewCameraSceneNode->attachObject(mViewCamera);
+
   createScene();
 
   mOgreRoot->addFrameListener(this);
@@ -246,7 +258,7 @@ void OgreWindow::createScene() {
   Ogre::RenderTexture *renderTexture =
       rttTexture->getBuffer()->getRenderTarget();
 
-  renderTexture->addViewport(mOgreCamera);
+  renderTexture->addViewport(mViewCamera);
   renderTexture->getViewport(0)->setClearEveryFrame(true);
   renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
   renderTexture->getViewport(0)->setOverlaysEnabled(false);
