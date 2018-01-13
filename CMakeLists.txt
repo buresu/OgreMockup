@@ -31,14 +31,9 @@ include_directories(${OGRE_INCLUDE_DIRS})
 link_directories(${OGRE_LIBRARY_DIRS})
 
 file(GLOB_RECURSE SOURCES "src/*[.cpp|.hpp]")
+file(GLOB_RECURSE RESOURCES "res/*.material")
 
-if(WIN32)
-set(APP_BUNDLE WIN32)
-elseif(APPLE)
-set(APP_BUNDLE MACOSX_BUNDLE)
-endif()
-
-add_executable(OgreMockup ${APP_BUNDLE} ${SOURCES})
+add_executable(OgreMockup ${SOURCES} ${RESOURCES})
 
 target_link_libraries(OgreMockup Qt5::Widgets)
 target_link_libraries(OgreMockup ${OGRE_LIBRARIES})
@@ -52,4 +47,15 @@ target_link_libraries(OgreMockup ${OPENGL_LIBRARY})
 if(APPLE)
 find_library(COCOA_FRAMEWORK Cocoa)
 target_link_libraries(OgreMockup ${COCOA_FRAMEWORK})
+endif()
+
+if(WIN32)
+set_target_properties(OgreMockup PROPERTIES
+  WIN32 TRUE
+)
+elseif(APPLE)
+set_target_properties(OgreMockup PROPERTIES
+  MACOSX_BUNDLE TRUE
+  RESOURCE ${RESOURCES}
+)
 endif()

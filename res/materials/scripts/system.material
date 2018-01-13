@@ -1,0 +1,181 @@
+material AxisGridLine/Gray
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0.4 0.4 0.4
+			}
+		}
+	}
+}
+
+material AxisGridLine/Red
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0.8 0 0
+			}
+		}
+	}
+}
+
+material AxisGridLine/Green
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 0.8 0
+			}
+		}
+	}
+}
+
+material Camera/Black
+{
+	technique
+	{
+		pass
+		{
+			cull_software none
+			cull_hardware none
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 0 0
+			}
+		}
+	}
+}
+
+material Gizmo/Black
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 0 0
+			}
+		}
+	}
+}
+
+material Gizmo/White
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 1 1 1
+			}
+		}
+	}
+}
+
+material Gizmo/Red
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 1 0 0
+			}
+		}
+	}
+}
+
+material Gizmo/Green
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 1 0
+			}
+		}
+	}
+}
+
+material Gizmo/Blue
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 0 1
+			}
+		}
+	}
+}
+
+material Gizmo/Yellow
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 1 1 0
+			}
+		}
+	}
+}
+
+material ActivePoint/Black
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			cull_software none
+			cull_hardware none
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 0 0 0
+			}
+		}
+	}
+}
+
+material ActivePoint/Red
+{
+	technique
+	{
+		pass
+		{
+			depth_check off
+			cull_software none
+			cull_hardware none
+			texture_unit
+			{
+				colour_op_ex source1 src_manual src_current 1 0 0
+			}
+		}
+	}
+}
