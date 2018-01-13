@@ -33,8 +33,15 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   root->addMovableObjectFactory(new RotateGizmoFactory);
   root->addMovableObjectFactory(new ScaleGizmoFactory);
 
+  auto resLocation =
+      QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation)
+          .back();
+
+  // Qt 5.9+ Bug...
+  resLocation.replace(".app", ".app/");
+
   Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-      "materials", "FileSystem",
+      resLocation.toStdString(), "FileSystem",
       Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, true);
 
   const Ogre::RenderSystemList &rsList = root->getAvailableRenderers();

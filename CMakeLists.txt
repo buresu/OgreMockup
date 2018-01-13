@@ -31,7 +31,7 @@ include_directories(${OGRE_INCLUDE_DIRS})
 link_directories(${OGRE_LIBRARY_DIRS})
 
 file(GLOB_RECURSE SOURCES "src/*[.cpp|.hpp]")
-file(GLOB_RECURSE RESOURCES "res/*.material")
+file(GLOB_RECURSE RESOURCES "res/materials/*.material" "res/models/*.mesh")
 
 add_executable(OgreMockup ${SOURCES} ${RESOURCES})
 
@@ -56,6 +56,6 @@ set_target_properties(OgreMockup PROPERTIES
 elseif(APPLE)
 set_target_properties(OgreMockup PROPERTIES
   MACOSX_BUNDLE TRUE
-  RESOURCE ${RESOURCES}
+  RESOURCE "${RESOURCES}"
 )
 endif()
