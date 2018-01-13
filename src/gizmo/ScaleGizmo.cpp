@@ -102,7 +102,7 @@ bool ScaleGizmo::mousePressed(const Ogre::Ray &ray) {
       Ogre::Vector3 p = ray.getPoint(r.second);
       Ogre::Vector3 v = p - getParentNode()->getPosition();
 
-      if (Ogre::Math::Abs(p.x) < size * Ogre::Real(0.1) && v.y > 0 &&
+      if (Ogre::Math::Abs(v.x) < size * Ogre::Real(0.1) && v.y > 0 &&
           v.y < size * Ogre::Real(1.2)) {
         mCurrentScaleType = ScaleType_Y;
         mStartPosition = p;
