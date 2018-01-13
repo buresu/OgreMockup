@@ -30,69 +30,119 @@ bool ScaleGizmo::mousePressed(const Ogre::Ray &ray) {
     cameraVec = camPos - objPos;
   }
 
-  // YZ Coordinate
-  auto r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
+  // Coordinate Angles
+  Ogre::Real angleX = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_X).valueDegrees() - 90);
+  Ogre::Real angleY = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Y).valueDegrees() - 90);
+  Ogre::Real angleZ = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Z).valueDegrees() - 90);
 
-  if (r.first) {
+  // X Coordinate
+  if (angleY > angleZ) {
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
 
-    if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.y > 0 &&
-        v.y < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_X;
-      mCurrentScaleType = ScaleType_Y;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.z > 0 &&
-               v.z < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_X;
-      mCurrentScaleType = ScaleType_Z;
-      mStartPosition = p;
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.x > 0 &&
+          v.x < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_X;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.x > 0 &&
+          v.x < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_X;
+        mStartPosition = p;
+      }
     }
   }
 
-  // XZ Coordinate
-  r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
+  // Y Coordinate
+  if (angleX > angleZ) {
 
-  if (r.first) {
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    if (r.first) {
 
-    if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.x > 0 &&
-        v.x < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Y;
-      mCurrentScaleType = ScaleType_X;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(v.x) < size * Ogre::Real(0.1) && v.z > 0 &&
-               v.z < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Y;
-      mCurrentScaleType = ScaleType_Z;
-      mStartPosition = p;
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.z) < size * Ogre::Real(0.1) && v.y > 0 &&
+          v.y < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_Y;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(p.x) < size * Ogre::Real(0.1) && v.y > 0 &&
+          v.y < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_Y;
+        mStartPosition = p;
+      }
     }
   }
 
-  // XY Coordinate
-  r = ray.intersects(
-      Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
+  // Z Coordinate
+  if (angleX > angleY) {
 
-  if (r.first) {
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
 
-    Ogre::Vector3 p = ray.getPoint(r.second);
-    Ogre::Vector3 v = p - getParentNode()->getPosition();
+    if (r.first) {
 
-    if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.x > 0 &&
-        v.x < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Z;
-      mCurrentScaleType = ScaleType_X;
-      mStartPosition = p;
-    } else if (Ogre::Math::Abs(p.x) < size * Ogre::Real(0.1) && v.y > 0 &&
-               v.y < size * Ogre::Real(1.2)) {
-      mCurrentAxisType = AxisType_Z;
-      mCurrentScaleType = ScaleType_Y;
-      mStartPosition = p;
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.y) < size * Ogre::Real(0.1) && v.z > 0 &&
+          v.z < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_Z;
+        mStartPosition = p;
+      }
+    }
+
+  } else {
+
+    auto r = ray.intersects(
+        Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
+
+    if (r.first) {
+
+      Ogre::Vector3 p = ray.getPoint(r.second);
+      Ogre::Vector3 v = p - getParentNode()->getPosition();
+
+      if (Ogre::Math::Abs(v.x) < size * Ogre::Real(0.1) && v.z > 0 &&
+          v.z < size * Ogre::Real(1.2)) {
+        mCurrentScaleType = ScaleType_Z;
+        mStartPosition = p;
+      }
     }
   }
 
@@ -124,7 +174,15 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
     cameraVec = camPos - objPos;
   }
 
-  if (mCurrentScaleType == ScaleType_X && mCurrentAxisType == AxisType_Y) {
+  // Coordinate Angles
+  Ogre::Real angleX = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_X).valueDegrees() - 90);
+  Ogre::Real angleY = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Y).valueDegrees() - 90);
+  Ogre::Real angleZ = Ogre::Math::Abs(
+      cameraVec.angleBetween(Ogre::Vector3::UNIT_Z).valueDegrees() - 90);
+
+  if (mCurrentScaleType == ScaleType_X && angleY > angleZ) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));
@@ -138,9 +196,8 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setScale(mStartScale);
       mTargetNode->scale(cv.length() / sv.length(), 1, 1);
     }
-  }
 
-  if (mCurrentScaleType == ScaleType_X && mCurrentAxisType == AxisType_Z) {
+  } else if (mCurrentScaleType == ScaleType_X && angleZ > angleY) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
@@ -154,9 +211,8 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setScale(mStartScale);
       mTargetNode->scale(cv.length() / sv.length(), 1, 1);
     }
-  }
 
-  if (mCurrentScaleType == ScaleType_Y && mCurrentAxisType == AxisType_X) {
+  } else if (mCurrentScaleType == ScaleType_Y && angleX > angleZ) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
@@ -170,9 +226,8 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setScale(mStartScale);
       mTargetNode->scale(1, cv.length() / sv.length(), 1);
     }
-  }
 
-  if (mCurrentScaleType == ScaleType_Y && mCurrentAxisType == AxisType_Z) {
+  } else if (mCurrentScaleType == ScaleType_Y && angleZ > angleX) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Z, getParentNode()->getPosition()));
@@ -186,9 +241,8 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setScale(mStartScale);
       mTargetNode->scale(1, cv.length() / sv.length(), 1);
     }
-  }
 
-  if (mCurrentScaleType == ScaleType_Z && mCurrentAxisType == AxisType_X) {
+  } else if (mCurrentScaleType == ScaleType_Z && angleX > angleY) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_X, getParentNode()->getPosition()));
@@ -202,9 +256,8 @@ bool ScaleGizmo::mouseMoved(const Ogre::Ray &ray) {
       mTargetNode->setScale(mStartScale);
       mTargetNode->scale(1, 1, cv.length() / sv.length());
     }
-  }
 
-  if (mCurrentScaleType == ScaleType_Z && mCurrentAxisType == AxisType_Y) {
+  } else if (mCurrentScaleType == ScaleType_Z && angleY > angleX) {
 
     auto r = ray.intersects(
         Ogre::Plane(Ogre::Vector3::UNIT_Y, getParentNode()->getPosition()));

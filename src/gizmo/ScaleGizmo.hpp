@@ -4,14 +4,6 @@
 
 class ScaleGizmo : public AbstractGizmo {
 public:
-  enum AxisType {
-    AxisType_None,
-    AxisType_X,
-    AxisType_Y,
-    AxisType_Z,
-    AxisType_Camera
-  };
-
   enum ScaleType {
     ScaleType_None,
     ScaleType_X,
@@ -30,7 +22,6 @@ public:
 protected:
   virtual void render() override;
 
-  AxisType mCurrentAxisType = AxisType_None;
   ScaleType mCurrentScaleType = ScaleType_None;
   Ogre::Vector3 mStartPosition = Ogre::Vector3::ZERO;
 
