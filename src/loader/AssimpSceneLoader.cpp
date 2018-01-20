@@ -346,6 +346,18 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
     ogreMaterial->getTechnique(0)->getPass(0)->setPolygonMode(
         Ogre::PM_WIREFRAME);
   }
+
+  // Transparent
+  float keyTransparent = 1.0;
+  if (material->Get(AI_MATKEY_COLOR_TRANSPARENT, keyTransparent) ==
+      AI_SUCCESS) {
+    ogreMaterial->getTechnique(0)->getPass(0)->setSceneBlending(
+        Ogre::SBT_TRANSPARENT_ALPHA);
+    Ogre::ColourValue diffuse =
+        ogreMaterial->getTechnique(0)->getPass(0)->getDiffuse();
+    diffuse.a = keyTransparent;
+    ogreMaterial->getTechnique(0)->getPass(0)->setDiffuse(diffuse);
+  }
 }
 
 void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
