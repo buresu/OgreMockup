@@ -226,6 +226,9 @@ void AssimpSceneLoader::parseMesh(const aiMesh *mesh) {
                                         ogreMesh->sharedVertexData->vertexCount,
                                         Ogre::HardwareBuffer::HBU_STATIC);
 
+  Ogre::Vector3 min = Ogre::Vector3::ZERO;
+  Ogre::Vector3 max = Ogre::Vector3::ZERO;
+
   float *vertices = static_cast<float *>(
       vertexBuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
 
@@ -238,6 +241,13 @@ void AssimpSceneLoader::parseMesh(const aiMesh *mesh) {
     vertices[index] = mesh->mVertices[i].x;
     vertices[index + 1] = mesh->mVertices[i].y;
     vertices[index + 2] = mesh->mVertices[i].z;
+
+    min.x = std::min(min.x, vertices[index]);
+    min.y = std::min(min.y, vertices[index + 1]);
+    min.z = std::min(min.z, vertices[index + 2]);
+    max.x = std::max(max.x, vertices[index]);
+    max.y = std::max(max.y, vertices[index + 1]);
+    max.z = std::max(max.z, vertices[index + 2]);
 
     if (mesh->HasTextureCoords(0)) {
       vertices[index + 3] = mesh->mTextureCoords[0][i].x;
@@ -275,7 +285,8 @@ void AssimpSceneLoader::parseMesh(const aiMesh *mesh) {
   subMesh->indexData->indexCount = mesh->mNumFaces * 3;
   subMesh->indexData->indexStart = 0;
 
-  ogreMesh->_setBounds(Ogre::AxisAlignedBox(-1, -1, -1, 1, 1, 1));
+  // Bounding Box
+  ogreMesh->_setBounds(Ogre::AxisAlignedBox(min, max));
 
   ogreMesh->load();
 
