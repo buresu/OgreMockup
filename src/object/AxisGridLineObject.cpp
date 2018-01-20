@@ -5,38 +5,38 @@ AxisGridLineObject::AxisGridLineObject(const Ogre::String &name)
 
   begin("AxisGridLine/Red", Ogre::RenderOperation::OT_LINE_LIST);
 
-  position(-4, 0, 0);
-  position(4, 0, 0);
+  position(-8, 0, 0);
+  position(8, 0, 0);
 
   end();
 
   begin("AxisGridLine/Green", Ogre::RenderOperation::OT_LINE_LIST);
 
-  position(0, -4, 0);
-  position(0, 4, 0);
+  position(0, -8, 0);
+  position(0, 8, 0);
 
   end();
 
   begin("AxisGridLine/Gray", Ogre::RenderOperation::OT_LINE_LIST);
 
   for (int i = 1; i < 9; ++i) {
-    position(-4, i * 0.5f, 0);
-    position(4, i * 0.5f, 0);
+    position(-8, i, 0);
+    position(8, i, 0);
   }
 
   for (int i = 1; i < 9; ++i) {
-    position(-4, -i * 0.5f, 0);
-    position(4, -i * 0.5f, 0);
+    position(-8, -i, 0);
+    position(8, -i, 0);
   }
 
   for (int i = 1; i < 9; ++i) {
-    position(i * 0.5f, -4, 0);
-    position(i * 0.5f, 4, 0);
+    position(i, -8, 0);
+    position(i, 8, 0);
   }
 
   for (int i = 1; i < 9; ++i) {
-    position(-i * 0.5f, -4, 0);
-    position(-i * 0.5f, 4, 0);
+    position(-i, -8, 0);
+    position(-i, 8, 0);
   }
 
   end();
