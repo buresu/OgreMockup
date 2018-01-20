@@ -115,7 +115,6 @@ void OgreWindow::initialize() {
   mViewCamera->setFarClipDistance(10.0f);
   //  mOgreCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 
-  viewCameraSceneNode->attachObject(mViewCamera);
   mViewCameraSceneNode->attachObject(mViewCamera);
 
   CameraObject *cameraObject =
