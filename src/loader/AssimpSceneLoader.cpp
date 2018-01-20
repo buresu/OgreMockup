@@ -285,7 +285,8 @@ void AssimpSceneLoader::parseMesh(const aiMesh *mesh) {
 
   // Entity Instance
   Ogre::Entity *entity = creator->createEntity(entityName, ogreMesh);
-  entity->setMaterialName("Default");
+
+  entity->setMaterialName(mMaterialNameMap[mesh->mMaterialIndex]);
 }
 
 void AssimpSceneLoader::parseTexture(const aiTexture *) {
@@ -305,7 +306,7 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
   }
 
   const Ogre::String name = getValidMeshName(keyName);
-  mMaterialNameMap[toOgreString(keyName)] = name;
+  mMaterialNameMap[mMaterialNameMap.size()] = name;
 
   // Material
   Ogre::MaterialPtr ogreMaterial = materialManager->create(

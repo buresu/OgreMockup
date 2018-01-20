@@ -46,7 +46,7 @@ protected:
 
   // Name Map
   std::map<Ogre::String, Ogre::String> mTextureNameMap;
-  std::map<Ogre::String, Ogre::String> mMaterialNameMap;
+  std::map<unsigned int, Ogre::String> mMaterialNameMap;
   std::map<Ogre::String, Ogre::String> mMeshNameMap;
   std::map<Ogre::String, Ogre::String> mEntityNameMap;
   std::map<Ogre::String, Ogre::String> mCameraNameMap;
