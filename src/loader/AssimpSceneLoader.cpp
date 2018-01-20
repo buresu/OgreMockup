@@ -472,9 +472,6 @@ void AssimpSceneLoader::parseChildNode(const aiNode *node,
   // Node
   Ogre::SceneNode *ogreNode = parent->createChildSceneNode(nodeName);
 
-  qDebug() << "name" << node->mName.C_Str();
-  qDebug() << "validName" << nodeName.c_str();
-
   if (isMesh(name)) {
 
     Ogre::Entity *entity = creator->getEntity(mEntityNameMap[name]);
