@@ -298,6 +298,8 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
 
   Ogre::MaterialManager *materialManager =
       Ogre::MaterialManager::getSingletonPtr();
+  Ogre::TextureManager *textureManager =
+      Ogre::TextureManager::getSingletonPtr();
 
   // Name
   aiString keyName;
@@ -357,6 +359,41 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
         ogreMaterial->getTechnique(0)->getPass(0)->getDiffuse();
     diffuse.a = keyTransparent;
     ogreMaterial->getTechnique(0)->getPass(0)->setDiffuse(diffuse);
+  }
+
+  // Diffuse Texture
+  for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE);
+       ++i) {
+
+    aiString texPath;
+    if (material->GetTexture(aiTextureType_DIFFUSE, i, &texPath) ==
+        AI_SUCCESS) {
+
+      const Ogre::String fileName = toOgreString(texPath);
+
+      if (!textureManager->resourceExists(fileName)) {
+
+        std::ifstream fs(fileName, std::ios::binary | std::ios::in);
+
+        if (fs.is_open()) {
+
+          Ogre::DataStreamPtr stream(
+              new Ogre::FileStreamDataStream(fileName, &fs, false));
+
+          Ogre::Image image;
+          image.load(stream, fileName.substr(fileName.find_last_of('.') + 1));
+
+          textureManager->loadImage(
+              fileName, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+              image);
+        }
+      }
+
+      if (textureManager->resourceExists(fileName)) {
+        ogreMaterial->getTechnique(0)->getPass(0)->createTextureUnitState(
+            toOgreString(texPath));
+      }
+    }
   }
 }
 
