@@ -178,14 +178,14 @@ void CameraController::mousePressed(QMouseEvent *event) {
   }
 }
 
-void CameraController::mouseMoved(int relX, int relY) {
+void CameraController::mouseMoved(QMouseEvent *event) {
 
-  //            static int lastX = evt.x();
-  //            static int lastY = evt.y();
-  //            int relX = evt.x() - lastX;
-  //            int relY = evt.y() - lastY;
-  //            lastX = evt.x();
-  //            lastY = evt.y();
+  static int lastX = event->x();
+  static int lastY = event->y();
+  int relX = event->x() - lastX;
+  int relY = event->y() - lastY;
+  lastX = event->x();
+  lastY = event->y();
 
   if (mCameraStyle == CS_ORBIT) {
 

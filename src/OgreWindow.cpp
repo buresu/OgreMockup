@@ -391,15 +391,8 @@ void OgreWindow::mouseMoveEvent(QMouseEvent *event) {
     return;
   }
 
-  static int lastX = event->x();
-  static int lastY = event->y();
-  int relX = event->x() - lastX;
-  int relY = event->y() - lastY;
-  lastX = event->x();
-  lastY = event->y();
-
   if (mCameraController && (event->buttons() & Qt::LeftButton)) {
-    mCameraController->mouseMoved(relX, relY);
+    mCameraController->mouseMoved(event);
     renderNow();
   }
 }

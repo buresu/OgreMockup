@@ -37,7 +37,7 @@ public:
 
   void mouseWheelRolled(QWheelEvent *event);
   void mousePressed(QMouseEvent *event);
-  void mouseMoved(int relX, int relY);
+  void mouseMoved(QMouseEvent *event);
   void mouseReleased(QMouseEvent *event);
 
 protected:
