@@ -339,6 +339,13 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
     ogreMaterial->getTechnique(0)->getPass(0)->setEmissive(
         toOgreColor(keyEmissive));
   }
+
+  // Wireframe
+  bool keyWireframe = false;
+  if (material->Get(AI_MATKEY_ENABLE_WIREFRAME, keyWireframe) == AI_SUCCESS) {
+    ogreMaterial->getTechnique(0)->getPass(0)->setPolygonMode(
+        Ogre::PM_WIREFRAME);
+  }
 }
 
 void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
