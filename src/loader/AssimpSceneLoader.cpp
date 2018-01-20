@@ -306,7 +306,7 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
   }
 
   const Ogre::String name = getValidMeshName(keyName);
-  mMaterialNameMap[mMaterialNameMap.size()] = name;
+  mMaterialNameMap[static_cast<unsigned int>(mMaterialNameMap.size())] = name;
 
   // Material
   Ogre::MaterialPtr ogreMaterial = materialManager->create(
