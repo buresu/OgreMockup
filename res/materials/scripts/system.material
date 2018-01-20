@@ -56,6 +56,22 @@ material Camera/Black
 	}
 }
 
+material Camera/Yellow
+{
+        technique
+        {
+                pass
+                {
+                        cull_software none
+                        cull_hardware none
+                        texture_unit
+                        {
+                                colour_op_ex source1 src_manual src_current 1 1 0
+                        }
+                }
+        }
+}
+
 material Gizmo/Black
 {
 	technique
