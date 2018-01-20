@@ -420,7 +420,7 @@ void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
   Ogre::Camera *ogreCamera = creator->createCamera(name);
 
   Ogre::Radian fovY =
-      2 * Ogre::Math::ATan(Ogre::Math::Tan(camera->mHorizontalFOV) *
+      2 * Ogre::Math::ATan(Ogre::Math::Tan(camera->mHorizontalFOV) /
                            camera->mAspect);
 
   ogreCamera->setProjectionType(Ogre::PT_PERSPECTIVE);
