@@ -102,17 +102,28 @@ void OgreWindow::initialize() {
   Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
-  Ogre::SceneNode *viewCameraSceneNode =
+  // View Camera
+  Ogre::SceneNode *mViewCameraSceneNode =
       mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
 
+  mViewCameraSceneNode->setPosition(Ogre::Vector3(0.0f, 0.0f, 0.0f));
+  mViewCameraSceneNode->lookAt(Ogre::Vector3(0.0f, 0.0f, -1.0f),
+                               Ogre::SceneNode::TS_WORLD);
+
   mViewCamera = mOgreSceneManager->createCamera("ViewCamera");
-  mViewCamera->setPosition(Ogre::Vector3(0.0f, 0.0f, 3.0f));
-  mViewCamera->lookAt(Ogre::Vector3(0.0f, 0.0f, -0.0f));
-  mViewCamera->setNearClipDistance(0.1f);
-  mViewCamera->setFarClipDistance(1000.0f);
+  mViewCamera->setNearClipDistance(1.0f);
+  mViewCamera->setFarClipDistance(10.0f);
   //  mOgreCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
 
   viewCameraSceneNode->attachObject(mViewCamera);
+  mViewCameraSceneNode->attachObject(mViewCamera);
+
+  CameraObject *cameraObject =
+      reinterpret_cast<CameraObject *>(mOgreSceneManager->createMovableObject(
+          "camera", CameraObjectFactory::FACTORY_TYPE_NAME));
+  cameraObject->attachCamera(mViewCamera);
+
+  mViewCameraSceneNode->attachObject(cameraObject);
 
   createScene();
 
@@ -216,17 +227,6 @@ void OgreWindow::createScene() {
   //          "activePoint", ActivePointObjectFactory::FACTORY_TYPE_NAME));
 
   //  activePointNode->attachObject(activePoint);
-
-  // Camera
-  Ogre::SceneNode *cameraNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
-
-  CameraObject *cameraObject =
-      reinterpret_cast<CameraObject *>(mOgreSceneManager->createMovableObject(
-          "camera", CameraObjectFactory::FACTORY_TYPE_NAME));
-
-  cameraNode->attachObject(cameraObject);
-  cameraNode->setPosition(0, -2, 2);
 
   mGizmoTargetNode = childSceneNode;
 

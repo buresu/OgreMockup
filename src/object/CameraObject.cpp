@@ -1,53 +1,147 @@
 #include "CameraObject.hpp"
+#include <OgreCamera.h>
 
 CameraObject::CameraObject(const Ogre::String &name)
     : Ogre::ManualObject(name) {
+  render();
+}
 
-  float widthSize = 0.2f;
-  float heightSize = 0.1f;
-  float depthSize = 0.2f;
+CameraObject::~CameraObject() {}
 
+void CameraObject::attachCamera(Ogre::Camera *camera) {
+  mCamera = camera;
+  render();
+}
+
+void CameraObject::detachCamera() {
+  mCamera = nullptr;
+  render();
+}
+
+void CameraObject::render() {
+
+  Ogre::Real cameraClip = 0.5;
+  Ogre::Real nearClip = 5.0;
+  Ogre::Real farClip = 50.0;
+  Ogre::Real aspect = 1.5;
+  Ogre::Radian fovY = Ogre::Degree(45);
+
+  if (mCamera) {
+    nearClip = mCamera->getNearClipDistance();
+    farClip = mCamera->getFarClipDistance();
+    aspect = mCamera->getAspectRatio();
+    fovY = mCamera->getFOVy();
+  }
+
+  Ogre::Radian fovX = 2 * Ogre::Math::ATan(Ogre::Math::Tan(fovY / 2) * aspect);
+
+  clear();
+
+  // Camera
   begin("Camera/Black", Ogre::RenderOperation::OT_LINE_LIST);
 
-  position(0, 0, 0);
-  position(-widthSize * 0.5f, heightSize * 0.5f, -depthSize);
+  Ogre::Real cameraX =
+      cameraClip * Ogre::Math::Sin(fovX / 2) / Ogre::Math::Cos(fovX / 2);
+  Ogre::Real cameraY =
+      cameraClip * Ogre::Math::Sin(fovY / 2) / Ogre::Math::Cos(fovY / 2);
+
+  position(-cameraX, cameraY, -cameraClip);
+  position(cameraX, cameraY, -cameraClip);
+
+  position(cameraX, cameraY, -cameraClip);
+  position(cameraX, -cameraY, -cameraClip);
+
+  position(cameraX, -cameraY, -cameraClip);
+  position(-cameraX, -cameraY, -cameraClip);
+
+  position(-cameraX, -cameraY, -cameraClip);
+  position(-cameraX, cameraY, -cameraClip);
 
   position(0, 0, 0);
-  position(widthSize * 0.5f, heightSize * 0.5f, -depthSize);
+  position(-cameraX, cameraY, -cameraClip);
 
   position(0, 0, 0);
-  position(widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
+  position(cameraX, cameraY, -cameraClip);
 
   position(0, 0, 0);
-  position(-widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
+  position(cameraX, -cameraY, -cameraClip);
 
-  position(-widthSize * 0.5f, heightSize * 0.5f, -depthSize);
-  position(widthSize * 0.5f, heightSize * 0.5f, -depthSize);
-
-  position(widthSize * 0.5f, heightSize * 0.5f, -depthSize);
-  position(widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
-
-  position(widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
-  position(-widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
-
-  position(-widthSize * 0.5f, -heightSize * 0.5f, -depthSize);
-  position(-widthSize * 0.5f, heightSize * 0.5f, -depthSize);
+  position(0, 0, 0);
+  position(-cameraX, -cameraY, -cameraClip);
 
   end();
 
   begin("Camera/Black", Ogre::RenderOperation::OT_TRIANGLE_STRIP);
 
-  float offset = 0.01f;
-  float triSize = 0.05f;
+  Ogre::Real offset = Ogre::Real(0.025);
+  Ogre::Real triSize = cameraX * Ogre::Real(0.5);
 
-  position(0, heightSize * 0.5f + offset + triSize, -depthSize);
-  position(-triSize * 1.4f, heightSize * 0.5f + offset, -depthSize);
-  position(triSize * 1.4f, heightSize * 0.5f + offset, -depthSize);
+  position(0, cameraY + offset + triSize, -cameraClip);
+  position(-triSize, cameraY + offset, -cameraClip);
+  position(triSize, cameraY + offset, -cameraClip);
+
+  end();
+
+  // Near
+  Ogre::Real nearX =
+      nearClip * Ogre::Math::Sin(fovX / 2) / Ogre::Math::Cos(fovX / 2);
+  Ogre::Real nearY =
+      nearClip * Ogre::Math::Sin(fovY / 2) / Ogre::Math::Cos(fovY / 2);
+
+  begin("Camera/Yellow", Ogre::RenderOperation::OT_LINE_LIST);
+
+  position(-nearX, nearY, -nearClip);
+  position(nearX, nearY, -nearClip);
+
+  position(nearX, nearY, -nearClip);
+  position(nearX, -nearY, -nearClip);
+
+  position(nearX, -nearY, -nearClip);
+  position(-nearX, -nearY, -nearClip);
+
+  position(-nearX, -nearY, -nearClip);
+  position(-nearX, nearY, -nearClip);
+
+  end();
+
+  // Far
+  Ogre::Real farX =
+      farClip * Ogre::Math::Sin(fovX / 2) / Ogre::Math::Cos(fovX / 2);
+  Ogre::Real farY =
+      farClip * Ogre::Math::Sin(fovY / 2) / Ogre::Math::Cos(fovY / 2);
+
+  begin("Camera/Yellow", Ogre::RenderOperation::OT_LINE_LIST);
+
+  position(-farX, farY, -farClip);
+  position(farX, farY, -farClip);
+
+  position(farX, farY, -farClip);
+  position(farX, -farY, -farClip);
+
+  position(farX, -farY, -farClip);
+  position(-farX, -farY, -farClip);
+
+  position(-farX, -farY, -farClip);
+  position(-farX, farY, -farClip);
+
+  end();
+
+  begin("Camera/Yellow", Ogre::RenderOperation::OT_LINE_LIST);
+
+  position(-nearX, nearY, -nearClip);
+  position(-farX, farY, -farClip);
+
+  position(nearX, nearY, -nearClip);
+  position(farX, farY, -farClip);
+
+  position(nearX, -nearY, -nearClip);
+  position(farX, -farY, -farClip);
+
+  position(-nearX, -nearY, -nearClip);
+  position(-farX, -farY, -farClip);
 
   end();
 }
-
-CameraObject::~CameraObject() {}
 
 Ogre::String CameraObjectFactory::FACTORY_TYPE_NAME = "CameraObject";
 

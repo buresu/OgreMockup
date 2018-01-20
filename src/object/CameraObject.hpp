@@ -7,10 +7,12 @@ public:
   explicit CameraObject(const Ogre::String &name);
   virtual ~CameraObject();
 
-  void attachCamera(Ogre::Camera *camera) { mCamera = camera; }
-  void dettach() { mCamera = nullptr; }
+  void attachCamera(Ogre::Camera *camera);
+  void detachCamera();
 
 protected:
+  void render();
+
   Ogre::Camera *mCamera = nullptr;
 };
 
