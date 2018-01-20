@@ -278,6 +278,14 @@ void AssimpSceneLoader::parseMesh(const aiMesh *mesh) {
   ogreMesh->_setBounds(Ogre::AxisAlignedBox(-1, -1, -1, 1, 1, 1));
 
   ogreMesh->load();
+
+  // Entity Name
+  const Ogre::String entityName = getValidEntityName(mesh->mName);
+  mEntityNameMap[toOgreString(mesh->mName)] = entityName;
+
+  // Entity Instance
+  Ogre::Entity *entity = creator->createEntity(entityName, ogreMesh);
+  entity->setMaterialName("Default");
 }
 
 void AssimpSceneLoader::parseTexture(const aiTexture *) {
@@ -412,12 +420,7 @@ void AssimpSceneLoader::parseChildNode(const aiNode *node,
 
   if (isMesh(name)) {
 
-    qDebug() << "type:"
-             << "mesh";
-
-    Ogre::Entity *entity = creator->createEntity(
-        getValidEntityName(node->mName), mMeshNameMap[name]);
-    entity->setMaterialName("Default");
+    Ogre::Entity *entity = creator->getEntity(mEntityNameMap[name]);
     ogreNode->attachObject(entity);
 
   } else if (isCamera(name)) {
