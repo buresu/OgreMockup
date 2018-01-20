@@ -123,13 +123,8 @@ void OgreWindow::createScene() {
 
   mOgreSceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
-  Ogre::Entity *sphereMesh =
-      mOgreSceneManager->createEntity("mySphere", Ogre::SceneManager::PT_CUBE);
-
   Ogre::SceneNode *childSceneNode =
       mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
-
-  //  childSceneNode->attachObject(sphereMesh);
 
   auto dragon = mOgreSceneManager->createEntity("root", "root.mesh");
 
@@ -152,11 +147,6 @@ void OgreWindow::createScene() {
   sphereMaterial->setAmbient(0.2f, 0.2f, 0.5f);
   sphereMaterial->setSelfIllumination(0.2f, 0.2f, 0.1f);
 
-  sphereMesh->setMaterialName("SphereMaterial");
-  childSceneNode->setPosition(Ogre::Vector3(0.0f, 0.0f, 0.0f));
-  //  childSceneNode->setScale(
-  //      Ogre::Vector3(0.01f, 0.01f, 0.01f)); // Radius, in theory.
-  //  childSceneNode->showBoundingBox(true);
   dragon->setMaterialName("SphereMaterial");
 
   Ogre::SceneNode *pLightNode =
