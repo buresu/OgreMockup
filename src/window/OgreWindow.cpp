@@ -3,6 +3,7 @@
 #include "gizmo/RotateGizmo.hpp"
 #include "gizmo/ScaleGizmo.hpp"
 #include "gizmo/TranslateGizmo.hpp"
+#include "loader/AssimpSceneLoader.hpp"
 #include "object/ActivePointObject.hpp"
 #include "object/AxisGridLineObject.hpp"
 #include "object/CameraObject.hpp"
@@ -133,28 +134,38 @@ void OgreWindow::createScene() {
   Ogre::SceneNode *childSceneNode =
       mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
 
-  auto dragon = mOgreSceneManager->createEntity("root", "root.mesh");
+  //  auto dragon = mOgreSceneManager->createEntity("root", "root.mesh");
+  //  childSceneNode->attachObject(dragon);
 
-  //  Ogre::SceneNode *childSceneNode2 =
-  //      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+  AssimpSceneLoader loader(childSceneNode);
+  //  qDebug() << loader.loadFile("teapot.obj");
+  //  qDebug() << loader.loadFile("okinawa.fbx");
 
-  //  childSceneNode2->attachObject(dragon);
-  childSceneNode->attachObject(dragon);
+  qDebug() << loader.loadFile("test.blend");
 
-  Ogre::MaterialPtr sphereMaterial =
-      Ogre::MaterialManager::getSingleton().create(
-          "SphereMaterial",
-          Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME, true);
+  auto itr = childSceneNode->getChildIterator();
+  while (itr.hasMoreElements()) {
+    Ogre::SceneNode *node = reinterpret_cast<Ogre::SceneNode *>(itr.getNext());
+    qDebug() << node->getName().c_str();
+    auto itr2 = node->getAttachedObjectIterator();
+    while (itr2.hasMoreElements()) {
+      Ogre::MovableObject *obj =
+          reinterpret_cast<Ogre::MovableObject *>(itr2.getNext());
+      qDebug() << obj->getName().c_str();
+      if (mOgreSceneManager->hasCamera(obj->getName())) {
 
-  sphereMaterial->getTechnique(0)->getPass(0)->setAmbient(0.1f, 0.1f, 0.1f);
-  sphereMaterial->getTechnique(0)->getPass(0)->setDiffuse(0.2f, 0.2f, 0.2f,
-                                                          1.0f);
-  sphereMaterial->getTechnique(0)->getPass(0)->setSpecular(0.9f, 0.9f, 0.9f,
-                                                           1.0f);
-  sphereMaterial->setAmbient(0.2f, 0.2f, 0.5f);
-  sphereMaterial->setSelfIllumination(0.2f, 0.2f, 0.1f);
+        Ogre::Camera *camera = reinterpret_cast<Ogre::Camera *>(obj);
 
-  dragon->setMaterialName("SphereMaterial");
+        CameraObject *cameraObject = reinterpret_cast<CameraObject *>(
+            mOgreSceneManager->createMovableObject(
+                camera->getName() + "001",
+                CameraObjectFactory::FACTORY_TYPE_NAME));
+        cameraObject->attachCamera(camera);
+
+        camera->getParentSceneNode()->attachObject(cameraObject);
+      }
+    }
+  }
 
   Ogre::SceneNode *pLightNode =
       mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
@@ -408,18 +419,20 @@ void OgreWindow::mouseReleaseEvent(QMouseEvent *event) {
     renderNow();
   }
 
-  QPoint pos = event->pos();
-
-  Ogre::Ray mouseRay = mOgreCamera->getCameraToViewportRay(
-      Ogre::Real(pos.x()) / mOgreWindow->getWidth(),
-      Ogre::Real(pos.y()) / mOgreWindow->getHeight());
-
-  Ogre::RaySceneQuery *pSceneQuery =
-      mOgreSceneManager->createRayQuery(mouseRay);
+  Ogre::RaySceneQuery *pSceneQuery = mOgreSceneManager->createRayQuery(ray);
   pSceneQuery->setSortByDistance(true);
   Ogre::RaySceneQueryResult vResult = pSceneQuery->execute();
   for (size_t ui = 0; ui < vResult.size(); ui++) {
     if (vResult[ui].movable) {
+
+      qDebug() << reinterpret_cast<Ogre::ManualObject *>(vResult[ui].movable)
+                      ->getName()
+                      .c_str();
+
+      reinterpret_cast<Ogre::ManualObject *>(vResult[ui].movable)
+          ->getParentSceneNode()
+          ->showBoundingBox(true);
+
       if (vResult[ui].movable->getMovableType().compare("Entity") == 0) {
         emit entitySelected(
             reinterpret_cast<Ogre::Entity *>(vResult[ui].movable));

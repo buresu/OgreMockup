@@ -1,5 +1,5 @@
 #include "Application.hpp"
-#include "OgreWindow.hpp"
+#include "window/OgreWindow.hpp"
 
 int main(int argc, char *argv[]) {
   Application a(argc, argv);
