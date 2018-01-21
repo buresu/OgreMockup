@@ -16,7 +16,6 @@ public:
   virtual void renderNow();
 
 protected:
-  virtual void exposeEvent(QExposeEvent *event) override;
   virtual bool eventFilter(QObject *target, QEvent *event) override;
 
   virtual void initialize();

@@ -80,16 +80,14 @@ bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
         mRenderWindow->resize(quint32(width()), quint32(height()));
         mRenderWindow->windowMovedOrResized();
       }
+    } else if (event->type() == QEvent::Expose) {
+      if (isExposed()) {
+        renderNow();
+      }
     }
   }
 
   return false;
-}
-
-void OgreWindow::exposeEvent(QExposeEvent *) {
-  if (isExposed()) {
-    renderNow();
-  }
 }
 
 void OgreWindow::log(const Ogre::String &msg) {
