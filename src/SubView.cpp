@@ -64,10 +64,17 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   viewPort2->setBackgroundColour(Ogre::ColourValue::Black);
   viewPort2->setVisibilityMask(mask);
 
+  CameraObject *cameraObject2 =
+      reinterpret_cast<CameraObject *>(sceneManager->createMovableObject(
+          "CameraObject2", CameraObjectFactory::FACTORY_TYPE_NAME));
+  cameraObject2->attachCamera(camera2);
+  cameraObject2->setVisibilityFlags(ObjectType_Camera);
+
   Ogre::SceneNode *node2 = rootNode->createChildSceneNode("camera2");
   node2->setPosition(0, 0, 0);
   node2->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_WORLD);
   node2->attachObject(camera2);
+  node2->attachObject(cameraObject2);
 
   // Camera 3
   Ogre::Camera *camera3 = sceneManager->createCamera("CameraView3");
@@ -82,10 +89,17 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   viewPort3->setBackgroundColour(Ogre::ColourValue::Black);
   viewPort3->setVisibilityMask(mask);
 
+  CameraObject *cameraObject3 =
+      reinterpret_cast<CameraObject *>(sceneManager->createMovableObject(
+          "CameraObject3", CameraObjectFactory::FACTORY_TYPE_NAME));
+  cameraObject3->attachCamera(camera3);
+  cameraObject3->setVisibilityFlags(ObjectType_Camera);
+
   Ogre::SceneNode *node3 = rootNode->createChildSceneNode("camera3");
   node3->setPosition(0, 0, 0);
   node3->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_WORLD);
   node3->attachObject(camera3);
+  node3->attachObject(cameraObject3);
 
   // Camera 4
   Ogre::Camera *camera4 = sceneManager->createCamera("CameraView4");
@@ -100,10 +114,17 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   viewPort4->setBackgroundColour(Ogre::ColourValue::Black);
   viewPort4->setVisibilityMask(mask);
 
+  CameraObject *cameraObject4 =
+      reinterpret_cast<CameraObject *>(sceneManager->createMovableObject(
+          "CameraObject4", CameraObjectFactory::FACTORY_TYPE_NAME));
+  cameraObject4->attachCamera(camera4);
+  cameraObject4->setVisibilityFlags(ObjectType_Camera);
+
   Ogre::SceneNode *node4 = rootNode->createChildSceneNode("camera4");
   node4->setPosition(0, 0, 0);
   node4->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_WORLD);
   node4->attachObject(camera4);
+  node4->attachObject(cameraObject4);
 }
 
 SubView::~SubView() {}
