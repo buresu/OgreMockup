@@ -1,11 +1,11 @@
 #include "Application.hpp"
-#include "window/OgreWindow.hpp"
+#include "MainView.hpp"
 
 int main(int argc, char *argv[]) {
   Application a(argc, argv);
 
-  OgreWindow w;
-  w.show();
+  MainView mainView;
+  mainView.show();
 
   return a.exec();
 }
