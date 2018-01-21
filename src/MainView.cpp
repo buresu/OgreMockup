@@ -117,6 +117,7 @@ void MainView::createScene() {
   AxisGridLineObject *axisGridLine =
       reinterpret_cast<AxisGridLineObject *>(mSceneManager->createMovableObject(
           "AxisGrid", AxisGridLineObjectFactory::FACTORY_TYPE_NAME));
+  axisGridLine->addVisibilityFlags(ObjectType_Grid);
 
   Ogre::SceneNode *axisGridLineNode =
       mSceneManager->getRootSceneNode()->createChildSceneNode();
