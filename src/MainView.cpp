@@ -10,15 +10,11 @@
 #include <OgreCamera.h>
 #include <OgreEntity.h>
 #include <OgreHardwarePixelBuffer.h>
-#include <OgreMaterialManager.h>
-#include <OgreRectangle2D.h>
-#include <OgreRenderTexture.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
 #include <OgreSceneNode.h>
 #include <OgreTechnique.h>
-#include <OgreTextureManager.h>
 #include <OgreViewport.h>
 #include <QDebug>
 
@@ -56,28 +52,6 @@ MainView::MainView(QWindow *parent) : OgreWindow(parent) {
                               Ogre::Real(mRenderWindow->getHeight()));
   mOgreCamera->setAutoAspectRatio(true);
 
-  // View Camera
-  Ogre::SceneNode *mViewCameraSceneNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
-
-  mViewCameraSceneNode->setPosition(Ogre::Vector3(0.0f, 0.0f, 0.0f));
-  mViewCameraSceneNode->lookAt(Ogre::Vector3(0.0f, 0.0f, -1.0f),
-                               Ogre::SceneNode::TS_WORLD);
-
-  mViewCamera = mOgreSceneManager->createCamera("ViewCamera");
-  mViewCamera->setNearClipDistance(1.0f);
-  mViewCamera->setFarClipDistance(10.0f);
-  //  mOgreCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
-
-  mViewCameraSceneNode->attachObject(mViewCamera);
-
-  CameraObject *cameraObject =
-      reinterpret_cast<CameraObject *>(mOgreSceneManager->createMovableObject(
-          "camera", CameraObjectFactory::FACTORY_TYPE_NAME));
-  cameraObject->attachCamera(mViewCamera);
-
-  mViewCameraSceneNode->attachObject(cameraObject);
-
   createScene();
 }
 
@@ -99,9 +73,9 @@ void MainView::createScene() {
 
   AssimpSceneLoader loader(childSceneNode);
   //  qDebug() << loader.loadFile("teapot.obj");
-  //  qDebug() << loader.loadFile("okinawa.fbx");
+  qDebug() << loader.loadFile("okinawa.fbx");
 
-  qDebug() << loader.loadFile("test.blend");
+  //  qDebug() << loader.loadFile("test.blend");
 
   auto itr = childSceneNode->getChildIterator();
   while (itr.hasMoreElements()) {
@@ -204,43 +178,6 @@ void MainView::createScene() {
   mTranslateGizmo->setVisible(true);
   mRotateGizmo->setVisible(false);
   mScaleGizmo->setVisible(false);
-
-  // Render to Texture
-  Ogre::TexturePtr rttTexture =
-      Ogre::TextureManager::getSingleton().createManual(
-          "RttTex", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
-          Ogre::TEX_TYPE_2D, 640, 480, 0, Ogre::PF_R8G8B8,
-          Ogre::TU_RENDERTARGET);
-
-  Ogre::RenderTexture *renderTexture =
-      rttTexture->getBuffer()->getRenderTarget();
-
-  renderTexture->addViewport(mViewCamera);
-  renderTexture->getViewport(0)->setClearEveryFrame(true);
-  renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
-  renderTexture->getViewport(0)->setOverlaysEnabled(false);
-  renderTexture->getViewport(0)->setBackgroundColour(
-      Ogre::ColourValue(0.2, 0.2, 0.2));
-
-  auto mMiniScreen = new Ogre::Rectangle2D(true);
-  mMiniScreen->setCorners(.5, 1.0, 1.0, .5);
-  mMiniScreen->setBoundingBox(Ogre::AxisAlignedBox::BOX_INFINITE);
-
-  Ogre::SceneNode *miniScreenNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
-
-  miniScreenNode->attachObject(mMiniScreen);
-
-  Ogre::MaterialPtr renderMaterial =
-      Ogre::MaterialManager::getSingleton().create(
-          "RttMat", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-
-  renderMaterial->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-  renderMaterial->getTechnique(0)->getPass(0)->createTextureUnitState("RttTex");
-
-  mMiniScreen->setMaterial(renderMaterial);
-
-  //  renderTexture->addListener(this);
 }
 
 void MainView::keyPressEvent(QKeyEvent *event) {

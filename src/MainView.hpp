@@ -28,8 +28,6 @@ protected:
   Ogre::SceneManager *mOgreSceneManager = nullptr;
   Ogre::Camera *mOgreCamera = nullptr;
   CameraController *mCameraController = nullptr;
-  Ogre::SceneNode *mViewCameraSceneNode = nullptr;
-  Ogre::Camera *mViewCamera = nullptr;
 
   // Gizmo
   Ogre::Node *mGizmoTargetNode = nullptr;
