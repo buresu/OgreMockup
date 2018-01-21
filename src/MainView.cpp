@@ -24,13 +24,15 @@
 
 MainView::MainView(QWindow *parent) : OgreWindow(parent) {
 
-  Ogre::String sceneName = Ogre::DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
+  Ogre::String sceneTypeName =
+      Ogre::DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
+  Ogre::String sceneName = "Scene001";
   Ogre::Root *root = Ogre::Root::getSingletonPtr();
 
   if (root->hasSceneManager(sceneName)) {
     mOgreSceneManager = root->getSceneManager(sceneName);
   } else {
-    mOgreSceneManager = root->createSceneManager();
+    mOgreSceneManager = root->createSceneManager(sceneTypeName, sceneName);
   }
 
   Ogre::SceneNode *childSceneNode =

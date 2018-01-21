@@ -7,7 +7,4 @@ class SubView : public OgreWindow {
 public:
   explicit SubView(QWindow *parent = nullptr);
   ~SubView();
-
-protected:
-  virtual void timerEvent(QTimerEvent *event) override;
 };

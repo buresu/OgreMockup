@@ -1,4 +1,5 @@
 #include "SubView.hpp"
+#include "object/CameraObject.hpp"
 #include <OgreCamera.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
@@ -7,14 +8,16 @@
 
 SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
-  Ogre::String sceneName = Ogre::DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
+  Ogre::String sceneTypeName =
+      Ogre::DefaultSceneManagerFactory::FACTORY_TYPE_NAME;
+  Ogre::String sceneName = "Scene001";
   Ogre::Root *root = Ogre::Root::getSingletonPtr();
   Ogre::SceneManager *sceneManager = nullptr;
 
   if (root->hasSceneManager(sceneName)) {
     sceneManager = root->getSceneManager(sceneName);
   } else {
-    sceneManager = root->createSceneManager(sceneName);
+    sceneManager = root->createSceneManager(sceneTypeName, sceneName);
   }
 
   Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
@@ -28,12 +31,19 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
   Ogre::Viewport *viewPort1 =
       mRenderWindow->addViewport(camera1, 0, 0, 0, 0.5, 0.5);
-  viewPort1->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
+  viewPort1->setBackgroundColour(Ogre::ColourValue::Black);
+
+  CameraObject *cameraObject1 =
+      reinterpret_cast<CameraObject *>(sceneManager->createMovableObject(
+          "CameraObject1", CameraObjectFactory::FACTORY_TYPE_NAME));
+  cameraObject1->attachCamera(camera1);
 
   Ogre::SceneNode *node1 = rootNode->createChildSceneNode("camera1");
   node1->setPosition(0, 0, 0);
   node1->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_WORLD);
+
   node1->attachObject(camera1);
+  node1->attachObject(cameraObject1);
 
   // Camera 2
   Ogre::Camera *camera2 = sceneManager->createCamera("CameraView2");
@@ -44,7 +54,7 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
   Ogre::Viewport *viewPort2 =
       mRenderWindow->addViewport(camera2, 1, 0.5, 0, 0.5, 0.5);
-  viewPort2->setBackgroundColour(Ogre::ColourValue(1, 0, 0));
+  viewPort2->setBackgroundColour(Ogre::ColourValue::Black);
 
   Ogre::SceneNode *node2 = rootNode->createChildSceneNode("camera2");
   node2->setPosition(0, 0, 0);
@@ -60,7 +70,7 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
   Ogre::Viewport *viewPort3 =
       mRenderWindow->addViewport(camera3, 2, 0, 0.5, 0.5, 0.5);
-  viewPort3->setBackgroundColour(Ogre::ColourValue(0, 1, 0));
+  viewPort3->setBackgroundColour(Ogre::ColourValue::Black);
 
   Ogre::SceneNode *node3 = rootNode->createChildSceneNode("camera3");
   node3->setPosition(0, 0, 0);
@@ -76,16 +86,12 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
   Ogre::Viewport *viewPort4 =
       mRenderWindow->addViewport(camera4, 3, 0.5, 0.5, 0.5, 0.5);
-  viewPort4->setBackgroundColour(Ogre::ColourValue(1, 0, 0));
+  viewPort4->setBackgroundColour(Ogre::ColourValue::Black);
 
   Ogre::SceneNode *node4 = rootNode->createChildSceneNode("camera4");
   node4->setPosition(0, 0, 0);
   node4->lookAt(Ogre::Vector3(0, 0, -1), Ogre::Node::TS_WORLD);
   node4->attachObject(camera4);
-
-  startTimer(10);
 }
 
 SubView::~SubView() {}
-
-void SubView::timerEvent(QTimerEvent *) { renderNow(); }
