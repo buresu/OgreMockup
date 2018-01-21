@@ -7,6 +7,7 @@
 #include "object/AxisGridLineObject.hpp"
 #include "object/CameraObject.hpp"
 #include <OgreRoot.h>
+#include <OgreTextureManager.h>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <RenderSystems/GL/OgreGLPlugin.h>
@@ -76,6 +77,9 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   rs->setConfigOption("Full Screen", "No");
   root->setRenderSystem(rs);
   root->initialise(false);
+
+  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
+  Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
 Application::~Application() {}

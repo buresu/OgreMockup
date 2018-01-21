@@ -99,9 +99,6 @@ void OgreWindow::initialize() {
                               Ogre::Real(mOgreWindow->getHeight()));
   mOgreCamera->setAutoAspectRatio(true);
 
-  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
-  Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
   // View Camera
   Ogre::SceneNode *mViewCameraSceneNode =
       mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
