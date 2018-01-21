@@ -325,6 +325,22 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
   Ogre::MaterialPtr ogreMaterial = materialManager->create(
       name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 
+  // Shading Model
+  int shadingModel = 0;
+  if (material->Get(AI_MATKEY_SHADING_MODEL, shadingModel) == AI_SUCCESS) {
+
+    if (shadingModel == aiShadingMode_Flat) {
+      ogreMaterial->getTechnique(0)->getPass(0)->setShadingMode(Ogre::SO_FLAT);
+    } else if (shadingModel == aiShadingMode_Phong) {
+      ogreMaterial->getTechnique(0)->getPass(0)->setShadingMode(Ogre::SO_PHONG);
+    } else if (shadingModel == aiShadingMode_Gouraud) {
+      ogreMaterial->getTechnique(0)->getPass(0)->setShadingMode(
+          Ogre::SO_GOURAUD);
+    } else if (shadingModel == aiShadingMode_NoShading) {
+      ogreMaterial->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+    }
+  }
+
   // Diffuse
   aiColor4D keyDiffuse;
   if (material->Get(AI_MATKEY_COLOR_DIFFUSE, keyDiffuse) == AI_SUCCESS) {
