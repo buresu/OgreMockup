@@ -25,8 +25,8 @@ protected:
 
   void createScene();
 
-  Ogre::SceneManager *mOgreSceneManager = nullptr;
-  Ogre::Camera *mOgreCamera = nullptr;
+  Ogre::SceneManager *mSceneManager = nullptr;
+  Ogre::Camera *mCamera = nullptr;
   CameraController *mCameraController = nullptr;
 
   // Gizmo

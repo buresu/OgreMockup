@@ -27,31 +27,30 @@ MainView::MainView(QWindow *parent) : OgreWindow(parent) {
   Ogre::Root *root = Ogre::Root::getSingletonPtr();
 
   if (root->hasSceneManager(sceneName)) {
-    mOgreSceneManager = root->getSceneManager(sceneName);
+    mSceneManager = root->getSceneManager(sceneName);
   } else {
-    mOgreSceneManager = root->createSceneManager(sceneTypeName, sceneName);
+    mSceneManager = root->createSceneManager(sceneTypeName, sceneName);
   }
 
   Ogre::SceneNode *childSceneNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
-  mOgreCamera = mOgreSceneManager->createCamera("MainCamera");
-  mOgreCamera->setPosition(Ogre::Vector3(0.0f, 0.0f, 5.0f));
-  mOgreCamera->lookAt(Ogre::Vector3(0.0f, 0.0f, -0.0f));
-  mOgreCamera->setNearClipDistance(0.1f);
-  mOgreCamera->setFarClipDistance(1000.0f);
-  //  mOgreCamera->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+  mCamera = mSceneManager->createCamera("MainCamera");
+  mCamera->setNearClipDistance(0.1f);
+  mCamera->setFarClipDistance(1000.0f);
 
-  childSceneNode->attachObject(mOgreCamera);
+  childSceneNode->setPosition(Ogre::Vector3(0.0f, 0.0f, 5.0f));
+  childSceneNode->lookAt(Ogre::Vector3(0.0f, 0.0f, 0.0f), Ogre::Node::TS_WORLD);
+  childSceneNode->attachObject(mCamera);
 
   mCameraController = new CameraController(childSceneNode);
 
-  Ogre::Viewport *pViewPort = mRenderWindow->addViewport(mOgreCamera);
+  Ogre::Viewport *pViewPort = mRenderWindow->addViewport(mCamera);
   pViewPort->setBackgroundColour(Ogre::ColourValue(0.3, 0.3, 0.3));
 
-  mOgreCamera->setAspectRatio(Ogre::Real(mRenderWindow->getWidth()) /
-                              Ogre::Real(mRenderWindow->getHeight()));
-  mOgreCamera->setAutoAspectRatio(true);
+  mCamera->setAspectRatio(Ogre::Real(mRenderWindow->getWidth()) /
+                          Ogre::Real(mRenderWindow->getHeight()));
+  mCamera->setAutoAspectRatio(true);
 
   createScene();
 }
@@ -64,10 +63,10 @@ MainView::~MainView() {
 
 void MainView::createScene() {
 
-  mOgreSceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+  mSceneManager->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
 
   Ogre::SceneNode *childSceneNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
   //  auto dragon = mOgreSceneManager->createEntity("root", "root.mesh");
   //  childSceneNode->attachObject(dragon);
@@ -78,58 +77,57 @@ void MainView::createScene() {
 
   //  qDebug() << loader.loadFile("test.blend");
 
-  auto itr = childSceneNode->getChildIterator();
-  while (itr.hasMoreElements()) {
-    Ogre::SceneNode *node = reinterpret_cast<Ogre::SceneNode *>(itr.getNext());
-    qDebug() << node->getName().c_str();
-    auto itr2 = node->getAttachedObjectIterator();
-    while (itr2.hasMoreElements()) {
-      Ogre::MovableObject *obj =
-          reinterpret_cast<Ogre::MovableObject *>(itr2.getNext());
-      qDebug() << obj->getName().c_str();
-      if (mOgreSceneManager->hasCamera(obj->getName())) {
+  //  auto itr = childSceneNode->getChildIterator();
+  //  while (itr.hasMoreElements()) {
+  //    Ogre::SceneNode *node = reinterpret_cast<Ogre::SceneNode
+  //    *>(itr.getNext()); qDebug() << node->getName().c_str(); auto itr2 =
+  //    node->getAttachedObjectIterator(); while (itr2.hasMoreElements()) {
+  //      Ogre::MovableObject *obj =
+  //          reinterpret_cast<Ogre::MovableObject *>(itr2.getNext());
+  //      qDebug() << obj->getName().c_str();
+  //      if (mOgreSceneManager->hasCamera(obj->getName())) {
 
-        Ogre::Camera *camera = reinterpret_cast<Ogre::Camera *>(obj);
+  //        Ogre::Camera *camera = reinterpret_cast<Ogre::Camera *>(obj);
 
-        CameraObject *cameraObject = reinterpret_cast<CameraObject *>(
-            mOgreSceneManager->createMovableObject(
-                camera->getName() + "001",
-                CameraObjectFactory::FACTORY_TYPE_NAME));
-        cameraObject->attachCamera(camera);
+  //        CameraObject *cameraObject = reinterpret_cast<CameraObject *>(
+  //            mOgreSceneManager->createMovableObject(
+  //                camera->getName() + "001",
+  //                CameraObjectFactory::FACTORY_TYPE_NAME));
+  //        cameraObject->attachCamera(camera);
 
-        camera->getParentSceneNode()->attachObject(cameraObject);
-      }
-    }
-  }
+  //        camera->getParentSceneNode()->attachObject(cameraObject);
+  //      }
+  //    }
+  //  }
 
   Ogre::SceneNode *pLightNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
-  Ogre::Light *light = mOgreSceneManager->createLight("MainLight");
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
+  Ogre::Light *light = mSceneManager->createLight("MainLight");
   pLightNode->attachObject(light);
   pLightNode->setPosition(20.0f, -80.0f, 50.0f);
 
   // Camera Controller
   Ogre::SceneNode *centerSceneNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
   mCameraController->setTargetNode(centerSceneNode);
   mCameraController->setCameraStyle(CameraController::CS_ORBIT);
 
   // Axis Grid Line
-  AxisGridLineObject *axisGridLine = reinterpret_cast<AxisGridLineObject *>(
-      mOgreSceneManager->createMovableObject(
+  AxisGridLineObject *axisGridLine =
+      reinterpret_cast<AxisGridLineObject *>(mSceneManager->createMovableObject(
           "AxisGrid", AxisGridLineObjectFactory::FACTORY_TYPE_NAME));
 
   Ogre::SceneNode *axisGridLineNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
   axisGridLineNode->attachObject(axisGridLine);
 
   // Translate Gizmo
   Ogre::SceneNode *translateGizmoNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
   mTranslateGizmo =
-      reinterpret_cast<TranslateGizmo *>(mOgreSceneManager->createMovableObject(
+      reinterpret_cast<TranslateGizmo *>(mSceneManager->createMovableObject(
           "translateGizmo", TranslateGizmoFactory::FACTORY_TYPE_NAME));
 
   mTranslateGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
@@ -140,10 +138,10 @@ void MainView::createScene() {
 
   // Rotate Gizmo
   Ogre::SceneNode *rotateGizmoNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
   mRotateGizmo =
-      reinterpret_cast<RotateGizmo *>(mOgreSceneManager->createMovableObject(
+      reinterpret_cast<RotateGizmo *>(mSceneManager->createMovableObject(
           "rotateGizmo", RotateGizmoFactory::FACTORY_TYPE_NAME));
 
   mRotateGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
@@ -154,10 +152,10 @@ void MainView::createScene() {
 
   // Scale Gizmo
   Ogre::SceneNode *scaleGizmoNode =
-      mOgreSceneManager->getRootSceneNode()->createChildSceneNode();
+      mSceneManager->getRootSceneNode()->createChildSceneNode();
 
   mScaleGizmo =
-      reinterpret_cast<ScaleGizmo *>(mOgreSceneManager->createMovableObject(
+      reinterpret_cast<ScaleGizmo *>(mSceneManager->createMovableObject(
           "scaleGizmo", ScaleGizmoFactory::FACTORY_TYPE_NAME));
 
   mScaleGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
@@ -236,7 +234,7 @@ void MainView::mousePressEvent(QMouseEvent *event) {
 
   Ogre::Real x = Ogre::Real(event->windowPos().x()) / width();
   Ogre::Real y = Ogre::Real(event->windowPos().y()) / height();
-  Ogre::Ray ray = mOgreCamera->getCameraToViewportRay(x, y);
+  Ogre::Ray ray = mCamera->getCameraToViewportRay(x, y);
 
   if (mTranslateGizmo->mousePressed(ray)) {
     renderNow();
@@ -263,7 +261,7 @@ void MainView::mouseMoveEvent(QMouseEvent *event) {
 
   Ogre::Real x = Ogre::Real(event->windowPos().x()) / width();
   Ogre::Real y = Ogre::Real(event->windowPos().y()) / height();
-  Ogre::Ray ray = mOgreCamera->getCameraToViewportRay(x, y);
+  Ogre::Ray ray = mCamera->getCameraToViewportRay(x, y);
 
   if (mTranslateGizmo->mouseMoved(ray)) {
     renderNow();
@@ -290,7 +288,7 @@ void MainView::mouseReleaseEvent(QMouseEvent *event) {
 
   Ogre::Real x = Ogre::Real(event->windowPos().x()) / width();
   Ogre::Real y = Ogre::Real(event->windowPos().y()) / height();
-  Ogre::Ray ray = mOgreCamera->getCameraToViewportRay(x, y);
+  Ogre::Ray ray = mCamera->getCameraToViewportRay(x, y);
 
   mTranslateGizmo->mouseReleased(ray);
   mRotateGizmo->mouseReleased(ray);
@@ -301,26 +299,27 @@ void MainView::mouseReleaseEvent(QMouseEvent *event) {
     renderNow();
   }
 
-  Ogre::RaySceneQuery *pSceneQuery = mOgreSceneManager->createRayQuery(ray);
+  Ogre::RaySceneQuery *pSceneQuery = mSceneManager->createRayQuery(ray);
   pSceneQuery->setSortByDistance(true);
   Ogre::RaySceneQueryResult vResult = pSceneQuery->execute();
   for (size_t ui = 0; ui < vResult.size(); ui++) {
     if (vResult[ui].movable) {
 
-      qDebug() << reinterpret_cast<Ogre::ManualObject *>(vResult[ui].movable)
-                      ->getName()
-                      .c_str();
+      //      qDebug() << reinterpret_cast<Ogre::ManualObject
+      //      *>(vResult[ui].movable)
+      //                      ->getName()
+      //                      .c_str();
 
-      reinterpret_cast<Ogre::ManualObject *>(vResult[ui].movable)
-          ->getParentSceneNode()
-          ->showBoundingBox(true);
+      //      reinterpret_cast<Ogre::ManualObject *>(vResult[ui].movable)
+      //          ->getParentSceneNode()
+      //          ->showBoundingBox(true);
 
       if (vResult[ui].movable->getMovableType().compare("Entity") == 0) {
       }
     }
   }
 
-  mOgreSceneManager->destroyQuery(pSceneQuery);
+  mSceneManager->destroyQuery(pSceneQuery);
 }
 
 bool MainView::frameRenderingQueued(const Ogre::FrameEvent &event) {
