@@ -369,6 +369,12 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
         toOgreColor(keyEmissive));
   }
 
+  // Shininess
+  float shininess = 1.0;
+  if (material->Get(AI_MATKEY_SHININESS, shininess) == AI_SUCCESS) {
+    ogreMaterial->getTechnique(0)->getPass(0)->setShininess(shininess);
+  }
+
   // Wireframe
   bool keyWireframe = false;
   if (material->Get(AI_MATKEY_ENABLE_WIREFRAME, keyWireframe) == AI_SUCCESS) {
