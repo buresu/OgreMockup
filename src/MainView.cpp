@@ -1,4 +1,5 @@
 #include "MainView.hpp"
+#include "common.hpp"
 #include "controller/CameraController.hpp"
 #include "gizmo/RotateGizmo.hpp"
 #include "gizmo/ScaleGizmo.hpp"
@@ -132,6 +133,8 @@ void MainView::createScene() {
           "translateGizmo", TranslateGizmoFactory::FACTORY_TYPE_NAME));
 
   mTranslateGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+  mTranslateGizmo->setVisibilityFlags(ObjectType_Gizmo);
+
   translateGizmoNode->attachObject(mTranslateGizmo);
   translateGizmoNode->setPosition(0, 0, 0);
 
@@ -144,6 +147,8 @@ void MainView::createScene() {
           "rotateGizmo", RotateGizmoFactory::FACTORY_TYPE_NAME));
 
   mRotateGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+  mRotateGizmo->setVisibilityFlags(ObjectType_Gizmo);
+
   rotateGizmoNode->attachObject(mRotateGizmo);
   rotateGizmoNode->setPosition(-3, -3, -3);
 
@@ -156,6 +161,8 @@ void MainView::createScene() {
           "scaleGizmo", ScaleGizmoFactory::FACTORY_TYPE_NAME));
 
   mScaleGizmo->setRenderQueueGroup(Ogre::RENDER_QUEUE_OVERLAY);
+  mScaleGizmo->setVisibilityFlags(ObjectType_Gizmo);
+
   scaleGizmoNode->attachObject(mScaleGizmo);
   scaleGizmoNode->setPosition(-2, -1, 1);
 

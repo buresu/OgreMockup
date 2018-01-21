@@ -1,4 +1,5 @@
 #include "SubView.hpp"
+#include "common.hpp"
 #include "object/CameraObject.hpp"
 #include <OgreCamera.h>
 #include <OgreRenderWindow.h>
@@ -22,6 +23,9 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
 
   Ogre::SceneNode *rootNode = sceneManager->getRootSceneNode();
 
+  unsigned int mask = 0;
+  mask |= ObjectType_Model;
+
   // Camera 1
   Ogre::Camera *camera1 = sceneManager->createCamera("CameraView1");
   camera1->setNearClipDistance(0.1f);
@@ -32,11 +36,13 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   Ogre::Viewport *viewPort1 =
       mRenderWindow->addViewport(camera1, 0, 0, 0, 0.5, 0.5);
   viewPort1->setBackgroundColour(Ogre::ColourValue::Black);
+  viewPort1->setVisibilityMask(mask);
 
   CameraObject *cameraObject1 =
       reinterpret_cast<CameraObject *>(sceneManager->createMovableObject(
           "CameraObject1", CameraObjectFactory::FACTORY_TYPE_NAME));
   cameraObject1->attachCamera(camera1);
+  cameraObject1->setVisibilityFlags(ObjectType_Camera);
 
   Ogre::SceneNode *node1 = rootNode->createChildSceneNode("camera1");
   node1->setPosition(0, 0, 0);
@@ -51,10 +57,12 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   camera2->setFarClipDistance(10.0f);
   camera2->setAspectRatio(Ogre::Real(640.0 / 480.0));
   camera2->setFOVy(Ogre::Degree(40));
+  camera2->setVisibilityFlags(ObjectType_Camera);
 
   Ogre::Viewport *viewPort2 =
       mRenderWindow->addViewport(camera2, 1, 0.5, 0, 0.5, 0.5);
   viewPort2->setBackgroundColour(Ogre::ColourValue::Black);
+  viewPort2->setVisibilityMask(mask);
 
   Ogre::SceneNode *node2 = rootNode->createChildSceneNode("camera2");
   node2->setPosition(0, 0, 0);
@@ -67,10 +75,12 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   camera3->setFarClipDistance(10.0f);
   camera3->setAspectRatio(Ogre::Real(640.0 / 480.0));
   camera3->setFOVy(Ogre::Degree(50));
+  camera3->setVisibilityFlags(ObjectType_Camera);
 
   Ogre::Viewport *viewPort3 =
       mRenderWindow->addViewport(camera3, 2, 0, 0.5, 0.5, 0.5);
   viewPort3->setBackgroundColour(Ogre::ColourValue::Black);
+  viewPort3->setVisibilityMask(mask);
 
   Ogre::SceneNode *node3 = rootNode->createChildSceneNode("camera3");
   node3->setPosition(0, 0, 0);
@@ -83,10 +93,12 @@ SubView::SubView(QWindow *parent) : OgreWindow(parent) {
   camera4->setFarClipDistance(10.0f);
   camera4->setAspectRatio(Ogre::Real(640.0 / 480.0));
   camera4->setFOVy(Ogre::Degree(60));
+  camera4->setVisibilityFlags(ObjectType_Camera);
 
   Ogre::Viewport *viewPort4 =
       mRenderWindow->addViewport(camera4, 3, 0.5, 0.5, 0.5, 0.5);
   viewPort4->setBackgroundColour(Ogre::ColourValue::Black);
+  viewPort4->setVisibilityMask(mask);
 
   Ogre::SceneNode *node4 = rootNode->createChildSceneNode("camera4");
   node4->setPosition(0, 0, 0);
