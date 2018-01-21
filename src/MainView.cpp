@@ -174,15 +174,20 @@ void MainView::createScene() {
 
   //  activePointNode->attachObject(activePoint);
 
-  mGizmoTargetNode = childSceneNode;
-
-  mTranslateGizmo->attachNode(mGizmoTargetNode);
-  mRotateGizmo->attachNode(mGizmoTargetNode);
-  mScaleGizmo->attachNode(mGizmoTargetNode);
+  setGizmoTarget(childSceneNode);
 
   mTranslateGizmo->setVisible(true);
   mRotateGizmo->setVisible(false);
   mScaleGizmo->setVisible(false);
+}
+
+void MainView::setGizmoTarget(Ogre::SceneNode *node) {
+
+  mGizmoTargetNode = node;
+
+  mTranslateGizmo->attachNode(mGizmoTargetNode);
+  mRotateGizmo->attachNode(mGizmoTargetNode);
+  mScaleGizmo->attachNode(mGizmoTargetNode);
 }
 
 void MainView::keyPressEvent(QKeyEvent *event) {
@@ -208,6 +213,22 @@ void MainView::keyPressEvent(QKeyEvent *event) {
     mTranslateGizmo->attachNode(mGizmoTargetNode);
     mRotateGizmo->attachNode(mGizmoTargetNode);
     mScaleGizmo->attachNode(mGizmoTargetNode);
+  } else if (event->key() == Qt::Key_Q) {
+    if (auto camera = mSceneManager->getCamera("CameraView1")) {
+      setGizmoTarget(camera->getParentSceneNode());
+    }
+  } else if (event->key() == Qt::Key_W) {
+    if (auto camera = mSceneManager->getCamera("CameraView2")) {
+      setGizmoTarget(camera->getParentSceneNode());
+    }
+  } else if (event->key() == Qt::Key_E) {
+    if (auto camera = mSceneManager->getCamera("CameraView3")) {
+      setGizmoTarget(camera->getParentSceneNode());
+    }
+  } else if (event->key() == Qt::Key_R) {
+    if (auto camera = mSceneManager->getCamera("CameraView4")) {
+      setGizmoTarget(camera->getParentSceneNode());
+    }
   }
 
   if (mCameraController) {

@@ -25,6 +25,8 @@ protected:
 
   void createScene();
 
+  void setGizmoTarget(Ogre::SceneNode *node);
+
   Ogre::SceneManager *mSceneManager = nullptr;
   Ogre::Camera *mCamera = nullptr;
   CameraController *mCameraController = nullptr;
