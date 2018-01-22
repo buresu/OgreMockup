@@ -450,7 +450,7 @@ void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
   ogreCamera->lookAt(toOgreVector3(camera->mLookAt));
   ogreCamera->setDirection(toOgreVector3(camera->mUp));
   ogreCamera->setNearClipDistance(camera->mClipPlaneNear);
-  ogreCamera->setNearClipDistance(camera->mClipPlaneFar);
+  ogreCamera->setFarClipDistance(camera->mClipPlaneFar);
   ogreCamera->setAspectRatio(camera->mAspect);
   ogreCamera->setFOVy(fovY);
 }
