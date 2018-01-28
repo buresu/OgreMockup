@@ -442,9 +442,14 @@ void AssimpSceneLoader::parseCamera(const aiCamera *camera,
   // Camera
   Ogre::Camera *ogreCamera = creator->createCamera(name);
 
+  float aspect = 1.f;
+
+  if (camera->mAspect > 0.f) {
+    aspect = camera->mAspect;
+  }
+
   Ogre::Radian fovY =
-      2 * Ogre::Math::ATan(Ogre::Math::Tan(camera->mHorizontalFOV) /
-                           camera->mAspect);
+      2 * Ogre::Math::ATan(Ogre::Math::Tan(camera->mHorizontalFOV) / aspect);
   Ogre::Quaternion upOrientation =
       toOgreVector3(camera->mUp).getRotationTo(Ogre::Vector3::UNIT_Y);
   Ogre::Quaternion forwardOrientation =
@@ -454,7 +459,7 @@ void AssimpSceneLoader::parseCamera(const aiCamera *camera,
   ogreCamera->setProjectionType(Ogre::PT_PERSPECTIVE);
   ogreCamera->setNearClipDistance(camera->mClipPlaneNear);
   ogreCamera->setFarClipDistance(camera->mClipPlaneFar);
-  ogreCamera->setAspectRatio(camera->mAspect);
+  ogreCamera->setAspectRatio(aspect);
   ogreCamera->setFOVy(fovY);
 
   node->rotate(upOrientation.Inverse(), Ogre::Node::TS_WORLD);
