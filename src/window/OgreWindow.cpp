@@ -23,6 +23,35 @@ void OgreWindow::render() {
   Ogre::Root::getSingletonPtr()->renderOneFrame();
 }
 
+void OgreWindow::renderLater() { requestUpdate(); }
+
+void OgreWindow::renderNow() {
+  if (isExposed()) {
+    mAnimating ? renderLater() : render();
+  }
+}
+
+bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
+
+  if (target == this) {
+    if (event->type() == QEvent::Resize) {
+      if (isExposed() && mRenderWindow != nullptr) {
+        // TODO: Check the other platforms
+#if !defined(Q_OS_MAC)
+        mRenderWindow->resize(quint32(width()), quint32(height()));
+#endif
+        //        mRenderWindow->windowMovedOrResized();
+      }
+    } else if (event->type() == QEvent::Expose) {
+      if (isExposed()) {
+        renderNow();
+      }
+    }
+  }
+
+  return false;
+}
+
 void OgreWindow::initialize() {
 
   Ogre::Root *root = Ogre::Root::getSingletonPtr();
@@ -62,35 +91,6 @@ void OgreWindow::initialize() {
   mRenderWindow->setVisible(true);
 
   root->addFrameListener(this);
-}
-
-void OgreWindow::renderLater() { requestUpdate(); }
-
-void OgreWindow::renderNow() {
-  if (isExposed()) {
-    mAnimating ? renderLater() : render();
-  }
-}
-
-bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
-
-  if (target == this) {
-    if (event->type() == QEvent::Resize) {
-      if (isExposed() && mRenderWindow != nullptr) {
-        // TODO: Check the other platforms
-#if !defined(Q_OS_MAC)
-        mRenderWindow->resize(quint32(width()), quint32(height()));
-#endif
-        mRenderWindow->windowMovedOrResized();
-      }
-    } else if (event->type() == QEvent::Expose) {
-      if (isExposed()) {
-        renderNow();
-      }
-    }
-  }
-
-  return false;
 }
 
 void OgreWindow::log(const Ogre::String &msg) {
