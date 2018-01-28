@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
   mainView.show();
 
   SubView subView;
-  subView.resize(1280, 960);
+  subView.resize(1280 / 2, 960 / 2);
   subView.show();
 
   return a.exec();
