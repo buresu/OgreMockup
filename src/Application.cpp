@@ -78,7 +78,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   root->setRenderSystem(rs);
   root->initialise(false);
 
-  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
+  Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(0);
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
