@@ -10,11 +10,13 @@ OgreWindow::OgreWindow(QWindow *parent) : QWindow(parent) {
 }
 
 OgreWindow::~OgreWindow() {
-  Ogre::Root *root = Ogre::Root::getSingletonPtr();
-  QString ptr = QString("0x%1").arg(reinterpret_cast<quintptr>(this),
-                                    QT_POINTER_SIZE * 2, 16, QChar('0'));
-  root->getRenderSystem()->destroyRenderWindow("RenderWindow:" +
-                                               ptr.toStdString());
+  if (mRenderWindow) {
+    Ogre::RenderSystem *rs = Ogre::Root::getSingletonPtr()->getRenderSystem();
+    if (rs) {
+      rs->destroyRenderWindow(mRenderWindow->getName());
+    }
+  }
+}
 }
 
 void OgreWindow::render() {
@@ -52,11 +54,10 @@ void OgreWindow::initialize() {
 
   parameters["FSAA"] = "4";
 
-  QString ptr = QString("0x%1").arg(reinterpret_cast<quintptr>(this),
-                                    QT_POINTER_SIZE * 2, 16, QChar('0'));
-  mRenderWindow = root->createRenderWindow("RenderWindow:" + ptr.toStdString(),
-                                           quint32(width()), quint32(height()),
-                                           false, &parameters);
+  Ogre::String wId = Ogre::StringConverter::toString(size_t(winId()));
+  mRenderWindow =
+      root->createRenderWindow("RenderWindow #" + wId, quint32(width()),
+                               quint32(height()), false, &parameters);
 
   mRenderWindow->setVSyncEnabled(true);
   mRenderWindow->setVisible(true);
