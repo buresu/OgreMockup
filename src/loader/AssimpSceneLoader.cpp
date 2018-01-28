@@ -31,6 +31,8 @@ bool AssimpSceneLoader::loadFile(const Ogre::String &fileName) {
 
   flags |= aiProcess_Triangulate;
   flags |= aiProcess_FlipUVs;
+  flags |= aiProcess_GenUVCoords;
+  flags |= aiProcess_TransformUVCoords;
 
   const aiScene *scene = importer.ReadFile(fileName, flags);
 
