@@ -37,18 +37,20 @@ protected:
   void parseMesh(const aiMesh *mesh);
   void parseTexture(const aiTexture *texture);
   void parseMaterial(const aiMaterial *material);
-  void parseCamera(const aiCamera *camera);
+  void parseCamera(const aiCamera *camera, Ogre::SceneNode *node);
   void parseLight(const aiLight *light);
   void parseTransform(const aiMatrix4x4 &matrix, Ogre::SceneNode *node);
   void parseChildNode(const aiNode *node, Ogre::SceneNode *parent);
 
   Ogre::SceneNode *mParentNode = nullptr;
 
+  // Instance Map
+  std::map<Ogre::String, aiCamera *> mCameraMap;
+
   // Name Map
   std::map<Ogre::String, Ogre::String> mTextureNameMap;
   std::map<unsigned int, Ogre::String> mMaterialNameMap;
   std::map<Ogre::String, Ogre::String> mMeshNameMap;
   std::map<Ogre::String, Ogre::String> mEntityNameMap;
-  std::map<Ogre::String, Ogre::String> mCameraNameMap;
   std::map<Ogre::String, Ogre::String> mLightNameMap;
 };

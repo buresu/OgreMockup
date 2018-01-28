@@ -38,6 +38,13 @@ bool AssimpSceneLoader::loadFile(const Ogre::String &fileName) {
     return false;
   }
 
+  // Build Camera Map
+  if (scene->HasCameras()) {
+    for (unsigned int i = 0; i < scene->mNumCameras; ++i) {
+      mCameraMap[toOgreString(scene->mCameras[i]->mName)] = scene->mCameras[i];
+    }
+  }
+
   // Parse Embedded Textures
   if (scene->HasTextures()) {
     for (unsigned int i = 0; i < scene->mNumTextures; ++i) {
@@ -56,13 +63,6 @@ bool AssimpSceneLoader::loadFile(const Ogre::String &fileName) {
   if (scene->HasMeshes()) {
     for (unsigned int i = 0; i < scene->mNumMeshes; ++i) {
       parseMesh(scene->mMeshes[i]);
-    }
-  }
-
-  // Parse Cameras
-  if (scene->HasCameras()) {
-    for (unsigned int i = 0; i < scene->mNumCameras; ++i) {
-      parseCamera(scene->mCameras[i]);
     }
   }
 
@@ -186,7 +186,7 @@ bool AssimpSceneLoader::isMesh(const Ogre::String &name) const {
 }
 
 bool AssimpSceneLoader::isCamera(const Ogre::String &name) const {
-  return mCameraNameMap.count(name) > 0;
+  return mCameraMap.count(name) > 0;
 }
 
 bool AssimpSceneLoader::isLight(const Ogre::String &name) const {
@@ -431,13 +431,13 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
   }
 }
 
-void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
+void AssimpSceneLoader::parseCamera(const aiCamera *camera,
+                                    Ogre::SceneNode *node) {
 
   Ogre::SceneManager *creator = mParentNode->getCreator();
 
   // Camera Name
   const Ogre::String name = getValidCameraName(camera->mName);
-  mCameraNameMap[toOgreString(camera->mName)] = name;
 
   // Camera
   Ogre::Camera *ogreCamera = creator->createCamera(name);
@@ -445,15 +445,22 @@ void AssimpSceneLoader::parseCamera(const aiCamera *camera) {
   Ogre::Radian fovY =
       2 * Ogre::Math::ATan(Ogre::Math::Tan(camera->mHorizontalFOV) /
                            camera->mAspect);
+  Ogre::Quaternion upOrientation =
+      toOgreVector3(camera->mUp).getRotationTo(Ogre::Vector3::UNIT_Y);
+  Ogre::Quaternion forwardOrientation =
+      toOgreVector3(camera->mLookAt)
+          .getRotationTo(Ogre::Vector3::NEGATIVE_UNIT_Z);
 
   ogreCamera->setProjectionType(Ogre::PT_PERSPECTIVE);
-  ogreCamera->setPosition(toOgreVector3(camera->mPosition));
-  ogreCamera->lookAt(toOgreVector3(camera->mLookAt));
-  ogreCamera->setDirection(toOgreVector3(camera->mUp));
   ogreCamera->setNearClipDistance(camera->mClipPlaneNear);
   ogreCamera->setFarClipDistance(camera->mClipPlaneFar);
   ogreCamera->setAspectRatio(camera->mAspect);
   ogreCamera->setFOVy(fovY);
+
+  node->rotate(upOrientation.Inverse(), Ogre::Node::TS_WORLD);
+  node->rotate(forwardOrientation.Inverse(), Ogre::Node::TS_WORLD);
+
+  node->attachObject(ogreCamera);
 }
 
 void AssimpSceneLoader::parseLight(const aiLight *light) {
@@ -478,9 +485,9 @@ void AssimpSceneLoader::parseTransform(const aiMatrix4x4 &m,
 
   matrix.decomposition(position, scale, orientation);
 
-  node->setPosition(position);
-  node->setScale(scale);
-  node->setOrientation(orientation);
+  node->rotate(orientation, Ogre::Node::TS_WORLD);
+  node->scale(scale);
+  node->translate(position, Ogre::Node::TS_WORLD);
 }
 
 void AssimpSceneLoader::parseChildNode(const aiNode *node,
@@ -513,8 +520,7 @@ void AssimpSceneLoader::parseChildNode(const aiNode *node,
 
   } else if (isCamera(name)) {
 
-    Ogre::Camera *camera = creator->getCamera(mCameraNameMap[name]);
-    ogreNode->attachObject(camera);
+    parseCamera(mCameraMap[name], ogreNode);
 
   } else if (isLight(name)) {
 
