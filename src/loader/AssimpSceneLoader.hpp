@@ -22,6 +22,7 @@ protected:
   Ogre::Vector3 toOgreVector3(const aiVector3D &vec) const;
   Ogre::ColourValue toOgreColor(const aiColor4D &color) const;
 
+  Ogre::String getValidFileName(const Ogre::String &fileName) const;
   Ogre::String getValidMeshName(const aiString &name) const;
   Ogre::String getValidTextureName(const aiString &name) const;
   Ogre::String getValidMaterialName(const aiString &name) const;

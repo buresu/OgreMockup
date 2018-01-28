@@ -93,6 +93,16 @@ Ogre::ColourValue AssimpSceneLoader::toOgreColor(const aiColor4D &color) const {
   return Ogre::ColourValue(color.r, color.g, color.b, color.a);
 }
 
+Ogre::String
+AssimpSceneLoader::getValidFileName(const Ogre::String &fileName) const {
+
+  if (Ogre::StringUtil::startsWith(fileName, "//")) {
+    return Ogre::StringUtil::normalizeFilePath(fileName, false);
+  }
+
+  return fileName;
+}
+
 Ogre::String AssimpSceneLoader::getValidMeshName(const aiString &name) const {
 
   Ogre::MeshManager *meshManager = Ogre::MeshManager::getSingletonPtr();
@@ -403,7 +413,7 @@ void AssimpSceneLoader::parseMaterial(const aiMaterial *material) {
     if (material->GetTexture(aiTextureType_DIFFUSE, i, &texPath) ==
         AI_SUCCESS) {
 
-      const Ogre::String fileName = toOgreString(texPath);
+      const Ogre::String fileName = getValidFileName(toOgreString(texPath));
 
       if (!textureManager->resourceExists(fileName)) {
 
