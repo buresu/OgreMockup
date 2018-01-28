@@ -17,7 +17,6 @@ OgreWindow::~OgreWindow() {
     }
   }
 }
-}
 
 void OgreWindow::render() {
   Ogre::WindowEventUtilities::messagePump();
@@ -78,7 +77,10 @@ bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
   if (target == this) {
     if (event->type() == QEvent::Resize) {
       if (isExposed() && mRenderWindow != nullptr) {
+        // TODO: Check the other platforms
+#if !defined(Q_OS_MAC)
         mRenderWindow->resize(quint32(width()), quint32(height()));
+#endif
         mRenderWindow->windowMovedOrResized();
       }
     } else if (event->type() == QEvent::Expose) {
