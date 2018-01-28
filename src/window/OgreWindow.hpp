@@ -20,9 +20,6 @@ protected:
 
   virtual void initialize();
 
-  void log(const Ogre::String &msg);
-  void log(const QString &msg);
-
   bool mAnimating = false;
   Ogre::RenderWindow *mRenderWindow = nullptr;
 };

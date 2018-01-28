@@ -1,5 +1,4 @@
 #include "OgreWindow.hpp"
-#include <OgreLogManager.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
 #include <OgreWindowEventUtilities.h>
@@ -91,14 +90,4 @@ void OgreWindow::initialize() {
   mRenderWindow->setVisible(true);
 
   root->addFrameListener(this);
-}
-
-void OgreWindow::log(const Ogre::String &msg) {
-  if (Ogre::LogManager::getSingletonPtr() != nullptr) {
-    Ogre::LogManager::getSingletonPtr()->logMessage(msg);
-  }
-}
-
-void OgreWindow::log(const QString &msg) {
-  log(Ogre::String(msg.toStdString().c_str()));
 }
