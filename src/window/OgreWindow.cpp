@@ -40,7 +40,7 @@ bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
 #if !defined(Q_OS_MAC)
         mRenderWindow->resize(quint32(width()), quint32(height()));
 #endif
-        //        mRenderWindow->windowMovedOrResized();
+        mRenderWindow->windowMovedOrResized();
       }
     } else if (event->type() == QEvent::Expose) {
       if (isExposed()) {
