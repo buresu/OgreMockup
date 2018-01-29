@@ -22,10 +22,15 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   // Ogre Initialize
-  Ogre::Root *root = new Ogre::Root(Ogre::BLANKSTRING);
+  Ogre::Root *root = new Ogre::Root(Ogre::BLANKSTRING, Ogre::BLANKSTRING, Ogre::BLANKSTRING);
 
+#if defined(Q_OS_WIN)
+  root->loadPlugin("RenderSystem_GL");
+  root->loadPlugin("RenderSystem_GL3Plus");
+#else
   root->installPlugin(new Ogre::GLPlugin);
   root->installPlugin(new Ogre::GL3PlusPlugin);
+#endif
 
   root->addMovableObjectFactory(new AxisGridLineObjectFactory);
   root->addMovableObjectFactory(new ActivePointObjectFactory);
@@ -49,10 +54,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   Ogre::RenderSystem *rs = rsList[0];
 
   Ogre::StringVector renderOrder;
-#if defined(Q_OS_WIN)
-  renderOrder.push_back("Direct3D9");
-  renderOrder.push_back("Direct3D11");
-#endif
   renderOrder.push_back("OpenGL");
   renderOrder.push_back("OpenGL 3+");
 
@@ -72,8 +73,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
     quit();
   }
 
-  /*QString dimensions = QString("%1 x %2").arg(width()).arg(height());
-  rs->setConfigOption("Video Mode", dimensions.toStdString());*/
   rs->setConfigOption("Full Screen", "No");
   root->setRenderSystem(rs);
   root->initialise(false);
