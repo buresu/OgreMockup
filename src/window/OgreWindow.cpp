@@ -79,7 +79,7 @@ void OgreWindow::initialize() {
   parameters["macAPICocoaUseNSView"] = "true";
 #endif
 
-  parameters["FSAA"] = "4";
+  parameters["FSAA"] = "0";
 
   Ogre::String wId = Ogre::StringConverter::toString(size_t(winId()));
   mRenderWindow =
