@@ -46,7 +46,7 @@ MainView::MainView(QWindow *parent) : OgreWindow(parent) {
   mCameraController = new CameraController(childSceneNode);
 
   Ogre::Viewport *pViewPort = mRenderWindow->addViewport(mCamera);
-  pViewPort->setBackgroundColour(Ogre::ColourValue(0.3, 0.3, 0.3));
+  pViewPort->setBackgroundColour(Ogre::ColourValue(0.1f, 0.1f, 0.1f));
 
   mCamera->setAspectRatio(Ogre::Real(mRenderWindow->getWidth()) /
                           Ogre::Real(mRenderWindow->getHeight()));
