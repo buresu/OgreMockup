@@ -36,13 +36,14 @@ bool OgreWindow::eventFilter(QObject *target, QEvent *event) {
     if (event->type() == QEvent::Resize) {
       if (isExposed() && mRenderWindow != nullptr) {
         // TODO: Check the other platforms
-#if !defined(Q_OS_MAC)
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
         mRenderWindow->resize(quint32(width()), quint32(height()));
-#endif
         mRenderWindow->windowMovedOrResized();
+#endif
       }
     } else if (event->type() == QEvent::Expose) {
       if (isExposed()) {
+        mRenderWindow->windowMovedOrResized();
         renderNow();
       }
     }
