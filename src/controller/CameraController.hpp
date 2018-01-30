@@ -58,4 +58,5 @@ protected:
   bool mGoingDown = false;
   bool mFastMove = false;
   Ogre::Vector3 mOffset = Ogre::Vector3::ZERO;
+  QPoint mLastPos;
 };

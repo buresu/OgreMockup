@@ -180,12 +180,15 @@ void CameraController::mousePressed(QMouseEvent *event) {
 
 void CameraController::mouseMoved(QMouseEvent *event) {
 
-  static int lastX = event->x();
-  static int lastY = event->y();
-  int relX = event->x() - lastX;
-  int relY = event->y() - lastY;
-  lastX = event->x();
-  lastY = event->y();
+  int relX = 0;
+  int relY = 0;
+
+  if (!mLastPos.isNull()) {
+    relX = event->x() - mLastPos.x();
+    relY = event->y() - mLastPos.y();
+  }
+
+  mLastPos = event->pos();
 
   if (mCameraStyle == CS_ORBIT) {
 
@@ -216,6 +219,8 @@ void CameraController::mouseMoved(QMouseEvent *event) {
 }
 
 void CameraController::mouseReleased(QMouseEvent *event) {
+
+  mLastPos = QPoint();
 
   if (mCameraStyle == CS_ORBIT) {
     if (event->buttons() & Qt::LeftButton) {
