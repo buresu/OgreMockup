@@ -18,8 +18,6 @@
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
 
-  // High Dpi Scaling for windows
-  QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   // Ogre Initialize
   Ogre::Root *root = new Ogre::Root(Ogre::BLANKSTRING, Ogre::BLANKSTRING, Ogre::BLANKSTRING);
