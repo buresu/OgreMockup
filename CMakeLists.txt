@@ -28,6 +28,10 @@ find_package(freetype REQUIRED)
 find_package(ZZip REQUIRED)
 endif()
 
+if(${OGRE_STATIC})
+add_definitions(-DOGRE_STATIC)
+endif()
+
 include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

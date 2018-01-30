@@ -28,12 +28,12 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   Ogre::Root *root =
       new Ogre::Root(Ogre::BLANKSTRING, Ogre::BLANKSTRING, Ogre::BLANKSTRING);
 
-#if defined(Q_OS_WIN)
-  root->loadPlugin("RenderSystem_GL");
-  root->loadPlugin("RenderSystem_GL3Plus");
-#else
+#if defined(OGRE_STATIC)
   root->installPlugin(new Ogre::GLPlugin);
   root->installPlugin(new Ogre::GL3PlusPlugin);
+#else
+  root->loadPlugin("RenderSystem_GL");
+  root->loadPlugin("RenderSystem_GL3Plus");
 #endif
 
   root->addMovableObjectFactory(new AxisGridLineObjectFactory);
