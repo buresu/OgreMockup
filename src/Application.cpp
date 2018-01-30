@@ -16,11 +16,17 @@
 #include <OgreConfigFile.h>
 #include <QDebug>
 
+#include "MainView.hpp"
+#include "SubView.hpp"
+
+#include <QHBoxLayout>
+#include <QWidget>
+
 Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
 
-
   // Ogre Initialize
-  Ogre::Root *root = new Ogre::Root(Ogre::BLANKSTRING, Ogre::BLANKSTRING, Ogre::BLANKSTRING);
+  Ogre::Root *root =
+      new Ogre::Root(Ogre::BLANKSTRING, Ogre::BLANKSTRING, Ogre::BLANKSTRING);
 
 #if defined(Q_OS_WIN)
   root->loadPlugin("RenderSystem_GL");
@@ -77,6 +83,26 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
 
   Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(0);
   Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+  //  QWidget *mainwindow = new QWidget();
+
+  //  QHBoxLayout *layout = new QHBoxLayout(mainwindow);
+
+  //  MainView *view = new MainView;
+  //  QWidget *container = QWidget::createWindowContainer(view, mainwindow);
+
+  //  layout->addWidget(container);
+  //  mainwindow->setLayout(layout);
+
+  //  mainwindow->show();
+
+  MainView *mainView = new MainView();
+  mainView->resize(1280, 960);
+  mainView->show();
+
+  SubView *subView = new SubView();
+  subView->resize(1280 / 2, 960 / 2);
+  subView->show();
 }
 
 Application::~Application() {}
