@@ -15,6 +15,8 @@ public:
   virtual void renderLater();
   virtual void renderNow();
 
+  Ogre::RenderWindow *renderWindow() const { return mRenderWindow; }
+
 protected:
   virtual bool eventFilter(QObject *target, QEvent *event) override;
 
