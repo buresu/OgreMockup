@@ -1,7 +1,6 @@
 #include "OgreWindow.hpp"
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
-#include <OgreWindowEventUtilities.h>
 
 OgreWindow::OgreWindow(QWindow *parent) : QWindow(parent) {
   initialize();
@@ -17,10 +16,7 @@ OgreWindow::~OgreWindow() {
   }
 }
 
-void OgreWindow::render() {
-  Ogre::WindowEventUtilities::messagePump();
-  Ogre::Root::getSingletonPtr()->renderOneFrame();
-}
+void OgreWindow::render() { Ogre::Root::getSingletonPtr()->renderOneFrame(); }
 
 void OgreWindow::renderLater() { requestUpdate(); }
 
