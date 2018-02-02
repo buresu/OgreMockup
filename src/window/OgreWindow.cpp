@@ -8,11 +8,9 @@ OgreWindow::OgreWindow(QWindow *parent) : QWindow(parent) {
 }
 
 OgreWindow::~OgreWindow() {
-  if (mRenderWindow) {
-    Ogre::RenderSystem *rs = Ogre::Root::getSingletonPtr()->getRenderSystem();
-    if (rs) {
-      rs->destroyRenderWindow(mRenderWindow->getName());
-    }
+  Ogre::RenderSystem *rs = Ogre::Root::getSingletonPtr()->getRenderSystem();
+  if (mRenderWindow && rs) {
+    rs->destroyRenderWindow(mRenderWindow->getName());
   }
 }
 
