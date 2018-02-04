@@ -63,7 +63,6 @@ void OgreWindow::initialize() {
 
 #if defined(Q_OS_MAC)
   parameters["macAPI"] = "cocoa";
-  parameters["macAPICocoaUseNSView"] = "true";
 #endif
 
   parameters["FSAA"] = "0";
