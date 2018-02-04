@@ -43,26 +43,19 @@ void OgreWindow::initialize() {
   Ogre::Root *root = Ogre::Root::getSingletonPtr();
   Ogre::RenderSystem *rs = root->getRenderSystem();
 
-  Ogre::NameValuePairList parameters;
+  Ogre::NameValuePairList params;
 
   if (rs->getName().find("GL") <= rs->getName().size()) {
-    parameters["currentGLContext"] = Ogre::String("false");
+    params["currentGLContext"] = Ogre::String("false");
   }
 
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-  parameters["externalWindowHandle"] =
+  params["externalWindowHandle"] =
       Ogre::StringConverter::toString(size_t(winId()));
-  parameters["parentWindowHandle"] =
+  params["parentWindowHandle"] =
       Ogre::StringConverter::toString(size_t(winId()));
-#else
-  parameters["externalWindowHandle"] =
-      Ogre::StringConverter::toString((unsigned long)(winId()));
-  parameters["parentWindowHandle"] =
-      Ogre::StringConverter::toString((unsigned long)(winId()));
-#endif
 
 #if defined(Q_OS_MAC)
-  parameters["macAPI"] = "cocoa";
+  params["macAPI"] = "cocoa";
 #endif
 
   parameters["FSAA"] = "0";
@@ -70,7 +63,7 @@ void OgreWindow::initialize() {
   Ogre::String wId = Ogre::StringConverter::toString(size_t(winId()));
   mRenderWindow =
       root->createRenderWindow("RenderWindow #" + wId, quint32(width()),
-                               quint32(height()), false, &parameters);
+                               quint32(height()), false, &params);
 
   mRenderWindow->setVSyncEnabled(true);
   mRenderWindow->setVisible(true);
