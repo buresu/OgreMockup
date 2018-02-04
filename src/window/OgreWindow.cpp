@@ -58,7 +58,7 @@ void OgreWindow::initialize() {
   params["macAPI"] = "cocoa";
 #endif
 
-  parameters["FSAA"] = "0";
+  params["FSAA"] = "4";
 
   Ogre::String wId = Ogre::StringConverter::toString(size_t(winId()));
   mRenderWindow =
