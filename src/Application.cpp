@@ -31,9 +31,11 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
 #if defined(OGRE_STATIC)
   root->installPlugin(new Ogre::GLPlugin);
   root->installPlugin(new Ogre::GL3PlusPlugin);
+  root->installPlugin(new Ogre::Codec_Assimp);
 #else
   root->loadPlugin("RenderSystem_GL");
   root->loadPlugin("RenderSystem_GL3Plus");
+  root->loadPlugin("Codec_Assimp");
 #endif
 
   root->addMovableObjectFactory(new AxisGridLineObjectFactory);

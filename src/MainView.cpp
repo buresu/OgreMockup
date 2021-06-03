@@ -4,7 +4,6 @@
 #include "gizmo/RotateGizmo.hpp"
 #include "gizmo/ScaleGizmo.hpp"
 #include "gizmo/TranslateGizmo.hpp"
-#include "loader/AssimpSceneLoader.hpp"
 #include "object/ActivePointObject.hpp"
 #include "object/AxisGridLineObject.hpp"
 #include "object/CameraObject.hpp"
@@ -68,37 +67,8 @@ void MainView::createScene() {
   Ogre::SceneNode *childSceneNode =
       mSceneManager->getRootSceneNode()->createChildSceneNode();
 
-  auto dragon = mSceneManager->createEntity("root", "models/root.mesh");
+  auto dragon = mSceneManager->createEntity("root", "models/test.fbx");
   childSceneNode->attachObject(dragon);
-
-  AssimpSceneLoader loader(childSceneNode);
-  //  qDebug() << loader.loadFile("teapot.obj");
-  qDebug() << loader.loadFile("okinawa.fbx");
-
-  //  qDebug() << loader.loadFile("test.blend");
-
-  //  auto itr = childSceneNode->getChildIterator();
-  //  while (itr.hasMoreElements()) {
-  //    Ogre::SceneNode *node = reinterpret_cast<Ogre::SceneNode
-  //    *>(itr.getNext()); qDebug() << node->getName().c_str(); auto itr2 =
-  //    node->getAttachedObjectIterator(); while (itr2.hasMoreElements()) {
-  //      Ogre::MovableObject *obj =
-  //          reinterpret_cast<Ogre::MovableObject *>(itr2.getNext());
-  //      qDebug() << obj->getName().c_str();
-  //      if (mOgreSceneManager->hasCamera(obj->getName())) {
-
-  //        Ogre::Camera *camera = reinterpret_cast<Ogre::Camera *>(obj);
-
-  //        CameraObject *cameraObject = reinterpret_cast<CameraObject *>(
-  //            mOgreSceneManager->createMovableObject(
-  //                camera->getName() + "001",
-  //                CameraObjectFactory::FACTORY_TYPE_NAME));
-  //        cameraObject->attachCamera(camera);
-
-  //        camera->getParentSceneNode()->attachObject(cameraObject);
-  //      }
-  //    }
-  //  }
 
   Ogre::SceneNode *pLightNode =
       mSceneManager->getRootSceneNode()->createChildSceneNode();
