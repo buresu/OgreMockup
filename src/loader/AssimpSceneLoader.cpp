@@ -500,7 +500,8 @@ void AssimpSceneLoader::parseTransform(const aiMatrix4x4 &m,
   Ogre::Matrix4 matrix(m.a1, m.a2, m.a3, m.a4, m.b1, m.b2, m.b3, m.b4, m.c1,
                        m.c2, m.c3, m.c4, m.d1, m.d2, m.d3, m.d4);
 
-  matrix.decomposition(position, scale, orientation);
+  Ogre::Affine3 affine(matrix);
+  affine.decomposition(position, scale, orientation);
 
   node->rotate(orientation, Ogre::Node::TS_WORLD);
   node->scale(scale);
