@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12")
 
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_package(OGRE REQUIRED)
 find_package(assimp REQUIRED)
 find_package(OpenGL REQUIRED)
