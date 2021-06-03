@@ -68,8 +68,8 @@ void MainView::createScene() {
   Ogre::SceneNode *childSceneNode =
       mSceneManager->getRootSceneNode()->createChildSceneNode();
 
-  //  auto dragon = mOgreSceneManager->createEntity("root", "root.mesh");
-  //  childSceneNode->attachObject(dragon);
+  auto dragon = mSceneManager->createEntity("root", "models/root.mesh");
+  childSceneNode->attachObject(dragon);
 
   AssimpSceneLoader loader(childSceneNode);
   //  qDebug() << loader.loadFile("teapot.obj");
