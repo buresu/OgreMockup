@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.12)
 
 project(OgreMockup VERSION 1.0.0)
 
@@ -16,10 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12")
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(OGRE REQUIRED)
-find_package(assimp REQUIRED)
-find_package(OpenGL REQUIRED)
+find_package(Qt5 5.15 COMPONENTS Widgets REQUIRED)
+find_package(OGRE 1.12 COMPONENTS REQUIRED)
 
 if(${OGRE_STATIC})
 find_package(zlib REQUIRED)
@@ -35,11 +33,9 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${OGRE_INCLUDE_DIRS})
-include_directories(${ASSIMP_INCLUDE_DIRS})
 
 link_directories(${OGRE_LIBRARY_DIRS})
 link_directories(${OGRE_PLUGIN_DIR})
-link_directories(${ASSIMP_LIBRARY_DIRS})
 
 file(GLOB_RECURSE SOURCES "src/*[.cpp|.hpp]")
 file(GLOB_RECURSE RESOURCES "res/materials/*.material" "res/models/*.mesh")
@@ -47,11 +43,7 @@ file(GLOB_RECURSE RESOURCES "res/materials/*.material" "res/models/*.mesh")
 add_executable(OgreMockup ${SOURCES} ${RESOURCES})
 
 target_link_libraries(OgreMockup Qt5::Widgets)
-target_link_libraries(OgreMockup ${OGRE_LIBRARIES} IrrXML zlib)
-target_link_libraries(OgreMockup ${OGRE_RenderSystem_GL_LIBRARIES})
-target_link_libraries(OgreMockup ${OGRE_RenderSystem_GL3Plus_LIBRARIES})
-target_link_libraries(OgreMockup ${ASSIMP_LIBRARIES})
-target_link_libraries(OgreMockup ${OPENGL_LIBRARY})
+target_link_libraries(OgreMockup OgreMain Codec_Assimp RenderSystem_GL RenderSystem_GL3Plus)
 
 if(${OGRE_STATIC})
 target_link_libraries(OgreMockup ${FREETYPE_LIBRARIES})
