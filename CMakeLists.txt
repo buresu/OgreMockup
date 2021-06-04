@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12")
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14")
 
 find_package(Qt5 5.15 COMPONENTS Widgets REQUIRED)
 find_package(OGRE 1.12 COMPONENTS REQUIRED)
@@ -42,8 +42,8 @@ file(GLOB_RECURSE RESOURCES "res/materials/*.material" "res/models/*.mesh")
 
 add_executable(OgreMockup ${SOURCES} ${RESOURCES})
 
-target_link_libraries(OgreMockup Qt5::Widgets)
-target_link_libraries(OgreMockup OgreMain Codec_Assimp RenderSystem_GL RenderSystem_GL3Plus)
+target_link_libraries(OgreMockup PRIVATE Qt5::Widgets)
+target_link_libraries(OgreMockup PRIVATE OgreMain Codec_Assimp RenderSystem_GL RenderSystem_GL3Plus)
 
 if(${OGRE_STATIC})
 target_link_libraries(OgreMockup ${FREETYPE_LIBRARIES})
